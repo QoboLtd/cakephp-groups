@@ -1,5 +1,5 @@
 {
-    "name": "qobo/Groups",
+    "name": "qobo/groups",
     "description": "Groups plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
