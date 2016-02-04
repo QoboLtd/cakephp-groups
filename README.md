@@ -9,5 +9,5 @@ This plugin works along with [CakeDC Users plugin](https://github.com/CakeDC/use
 The recommended way to install composer packages is:
 
 ```
-composer require qobo/groups
+composer require qobo/cakephp-groups
 ```
