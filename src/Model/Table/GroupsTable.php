@@ -42,7 +42,7 @@ class GroupsTable extends Table
             'foreignKey' => 'group_id',
             'targetForeignKey' => 'user_id',
             'joinTable' => 'groups_users',
-            'className' => 'Groups.Users'
+            'className' => 'CakeDC/Users.Users'
         ]);
     }
 
