@@ -4,12 +4,28 @@
     processIsolation="false"
     stopOnFailure="false"
     syntaxCheck="false"
-    bootstrap="./tests/bootstrap.php"
+    bootstrap="./vendor/cakephp/cakephp/tests/bootstrap.php"
     >
     <php>
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
     </php>
+
+	<filter>
+		<whitelist>
+			<directory suffix=".php">.</directory>
+			<exclude>
+                <directory>./config/*</directory>
+				<directory>./vendor/*</directory>
+				<directory>./tests/*</directory>
+				<file>./index.php</file>
+			</exclude>
+		</whitelist>
+	</filter>
+
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>

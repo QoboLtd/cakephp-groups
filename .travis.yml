@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: hhvm
+    - php: 5.4
+
+install:
+  - composer install
+
+script:
+  - ./vendor/bin/phpunit
+  - ./vendor/bin/phpcs -n -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ config/ tests/Fixture/ tests/TestCase/
+
