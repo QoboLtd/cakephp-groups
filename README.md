@@ -11,3 +11,15 @@ The recommended way to install composer packages is:
 ```
 composer require qobo/cakephp-groups
 ```
+
+Run plugin's migration task:
+
+```
+bin/cake migrations migrate -p Groups
+```
+
+Load the plugin in your config/bootstrap.php file:
+
+```
+Plugin::load('Groups', ['bootstrap' => false, 'routes' => true]);
+```
