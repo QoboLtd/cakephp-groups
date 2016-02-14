@@ -20,6 +20,6 @@ bin/cake migrations migrate -p Groups
 
 Load the plugin in your config/bootstrap.php file:
 
-```
+```php
 Plugin::load('Groups', ['bootstrap' => false, 'routes' => true]);
 ```
