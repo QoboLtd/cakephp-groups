@@ -7,12 +7,14 @@
             </div>
             <table class="table table-hover">
                 <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= h($group->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Name') ?></th>
-                    <td><?= h($group->name) ?></td>
+                    <td class="col-xs-3 text-right">
+                        <strong><?= __('Id') ?>:</strong>
+                    </td>
+                    <td class="col-xs-3"><?= h($group->id) ?></td>
+                    <td class="col-xs-3 text-right">
+                        <strong><?= __('Name') ?>:</strong>
+                    </td>
+                    <td class="col-xs-3"><?= h($group->name) ?></td>
                 </tr>
             </table>
         </div>
@@ -30,7 +32,7 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="groups_users">
+            <div role="tabpanel" class="tab-pane active" id="users">
                 <?php if (!empty($group->users)): ?>
                 <table class="table table-hover">
                     <thead>
