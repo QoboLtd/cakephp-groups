@@ -7,14 +7,14 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-xs-3 col-md-2 text-right">
+                    <div class="col-xs-4 col-md-2 text-right">
                         <strong><?= __('Id') ?>:</strong>
                     </div>
-                    <div class="col-xs-9 col-md-4"><?= h($group->id) ?></div>
-                    <div class="col-xs-3 col-md-2 text-right">
+                    <div class="col-xs-8 col-md-4"><?= h($group->id) ?></div>
+                    <div class="col-xs-4 col-md-2 text-right">
                         <strong><?= __('Name') ?>:</strong>
                     </div>
-                    <div class="col-xs-9 col-md-4"><?= h($group->name) ?></div>
+                    <div class="col-xs-8 col-md-4"><?= h($group->name) ?></div>
                 </div>
             </div>
         </div>
