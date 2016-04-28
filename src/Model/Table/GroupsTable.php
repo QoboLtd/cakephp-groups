@@ -32,12 +32,6 @@ class GroupsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsToMany('Phinxlog', [
-            'foreignKey' => 'group_id',
-            'targetForeignKey' => 'phinxlog_id',
-            'joinTable' => 'groups_phinxlog',
-            'className' => 'Groups.Phinxlog'
-        ]);
         $this->belongsToMany('Users', [
             'foreignKey' => 'group_id',
             'targetForeignKey' => 'user_id',
