@@ -58,4 +58,23 @@ class GroupsTable extends Table
 
         return $validator;
     }
+
+    /**
+     * Method that retrieves specified user's groups.
+     *
+     * @param  string $userId user id
+     * @return array
+     */
+    public function getUserGroups($userId)
+    {
+        $query = $this->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'name'
+        ]);
+        $query->matching('Users', function ($q) use ($userId) {
+            return $q->where(['Users.id' => $userId]);
+        });
+
+        return $query->toArray();
+    }
 }
