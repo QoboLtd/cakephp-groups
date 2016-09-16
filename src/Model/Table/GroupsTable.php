@@ -31,6 +31,7 @@ class GroupsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Muffin/Trash.Trash');
 
         $this->belongsToMany('Users', [
             'foreignKey' => 'group_id',
