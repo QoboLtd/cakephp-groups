@@ -18,8 +18,21 @@ Run plugin's migration task:
 bin/cake migrations migrate -p Groups
 ```
 
-Load the plugin in your config/bootstrap.php file:
+Run required plugin(s) migration task:
 
-```php
-Plugin::load('Groups', ['bootstrap' => false, 'routes' => true]);
+```
+bin/cake migrations migrate -p CakeDC/Users
+```
+
+```
+## Setup
+Load plugin
+```
+bin/cake plugin load --routes Groups
+```
+
+Load required plugin(s)
+```
+bin/cake plugin load Muffin/Trash
+bin/cake plugin load --routes --bootstrap CakeDC/Users
 ```
