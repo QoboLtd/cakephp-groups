@@ -24,7 +24,6 @@ Run required plugin(s) migration task:
 bin/cake migrations migrate -p CakeDC/Users
 ```
 
-```
 ## Setup
 Load plugin
 ```
