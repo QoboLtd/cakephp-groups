@@ -50,6 +50,7 @@ class GroupsController extends AppController
             $group = $this->Groups->patchEntity($group, $this->request->data);
             if ($this->Groups->save($group)) {
                 $this->Flash->success(__('The group has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The group could not be saved. Please, try again.'));
@@ -76,6 +77,7 @@ class GroupsController extends AppController
             $group = $this->Groups->patchEntity($group, $this->request->data);
             if ($this->Groups->save($group)) {
                 $this->Flash->success(__('The group has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The group could not be saved. Please, try again.'));
@@ -102,6 +104,7 @@ class GroupsController extends AppController
         } else {
             $this->Flash->error(__('The group could not be deleted. Please, try again.'));
         }
+
         return $this->redirect(['action' => 'index']);
     }
 }
