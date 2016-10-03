@@ -12,6 +12,13 @@
                     </div>
                     <div class="col-xs-8 col-md-4"><?= h($group->name) ?></div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-2 text-right">
+                        <strong><?= __('Description') ?>:</strong>
+                    </div>
+                    <div class="col-xs-8 col-md-4"><?= h($group->description) ?></div>
+                </div>
+
             </div>
         </div>
     </div>

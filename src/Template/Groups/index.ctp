@@ -20,7 +20,10 @@
                 <tbody>
                     <?php foreach ($groups as $group): ?>
                     <tr>
-                        <td><?= h($group->name) ?></td>
+                        <td>
+                            <?= h($group->name) ?>
+                            <p class="text-muted"><?= h($group->description) ?></p>
+                        </td>
                         <td>
                             <?php
                                 if (!empty($group->users)) {
