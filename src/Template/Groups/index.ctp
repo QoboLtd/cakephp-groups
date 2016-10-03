@@ -12,16 +12,27 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th><?= $this->Paginator->sort('id') ?></th>
                         <th><?= $this->Paginator->sort('name') ?></th>
+                        <th><?= __('Users') ?></th>
                         <th class="actions"><?= __('Actions') ?></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($groups as $group): ?>
                     <tr>
-                        <td><?= h($group->id) ?></td>
                         <td><?= h($group->name) ?></td>
+                        <td>
+                            <?php
+                                if (!empty($group->users)) {
+                                    $users = [];
+                                    foreach ($group->users as $user) {
+                                        $users[] = $this->Html->link($user->username, '/users/view/' . $user->id, ['class' =>"label label-primary"]);
+                                    }
+                                    sort($users);
+                                    print implode(' ', $users);
+                                }
+                            ?>
+                        </td>
                         <td class="actions">
                             <?= $this->Html->link('', ['action' => 'view', $group->id], ['title' => __('View'), 'class' => 'btn btn-default glyphicon glyphicon-eye-open']) ?>
                             <?= $this->Html->link('', ['action' => 'edit', $group->id], ['title' => __('View'), 'class' => 'btn btn-default glyphicon glyphicon-pencil']) ?>
