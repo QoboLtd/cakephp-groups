@@ -1,5 +1,5 @@
 <?php
-namespace Foobar\Test\App\Controller;
+namespace Groups\Test\App\Controller;
 
 use \Cake\Controller\Controller;
 
