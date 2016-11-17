@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($groups as $group): ?>
+                    <?php foreach ($groups as $group) : ?>
                     <tr>
                         <td>
                             <?= h($group->name) ?>
@@ -26,14 +26,14 @@
                         </td>
                         <td>
                             <?php
-                                if (!empty($group->users)) {
-                                    $users = [];
-                                    foreach ($group->users as $user) {
-                                        $users[] = $this->Html->link($user->username, '/users/view/' . $user->id, ['class' =>"label label-primary"]);
-                                    }
-                                    sort($users);
-                                    print implode(' ', $users);
+                            if (!empty($group->users)) {
+                                $users = [];
+                                foreach ($group->users as $user) {
+                                    $users[] = $this->Html->link($user->username, '/users/view/' . $user->id, ['class' => "label label-primary"]);
                                 }
+                                sort($users);
+                                print implode(' ', $users);
+                            }
                             ?>
                         </td>
                         <td class="actions">
