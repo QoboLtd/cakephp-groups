@@ -35,7 +35,7 @@
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="users">
-                <?php if (!empty($group->users)): ?>
+                <?php if (!empty($group->users)) : ?>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -47,7 +47,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($group->users as $users): ?>
+                            <?php foreach ($group->users as $users) : ?>
                             <tr>
                                 <td><?= $this->Html->link($users->username, '/users/view/' . $users->id) ?></td>
                                 <td><?= h($users->email) ?></td>
