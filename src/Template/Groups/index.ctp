@@ -38,8 +38,12 @@
                         </td>
                         <td class="actions">
                             <?= $this->Html->link('', ['action' => 'view', $group->id], ['title' => __('View'), 'class' => 'btn btn-default glyphicon glyphicon-eye-open']) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $group->id], ['title' => __('View'), 'class' => 'btn btn-default glyphicon glyphicon-pencil']) ?>
-                            <?= $this->Form->postLink('', ['action' => 'delete', $group->id], ['confirm' => __('Are you sure you want to delete # {0}?', $group->id), 'title' => __('Delete'), 'class' => 'btn btn-default glyphicon glyphicon-trash']) ?>
+                            <?php if (!$group->deny_edit) : ?>
+                                <?= $this->Html->link('', ['action' => 'edit', $group->id], ['title' => __('View'), 'class' => 'btn btn-default glyphicon glyphicon-pencil']) ?>
+                            <?php endif; ?>
+                            <?php if (!$group->deny_delete) : ?>
+                                <?= $this->Form->postLink('', ['action' => 'delete', $group->id], ['confirm' => __('Are you sure you want to delete # {0}?', $group->id), 'title' => __('Delete'), 'class' => 'btn btn-default glyphicon glyphicon-trash']) ?>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
