@@ -61,6 +61,24 @@ class GroupsTable extends Table
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        // don't allow editing of non-editable group(s)
+        $rules->addUpdate(function ($entity, $options) {
+            return !$entity->deny_edit;
+        }, 'systemCheck');
+
+        // don't allow deletion of non-deletable group(s)
+        $rules->addDelete(function ($entity, $options) {
+            return !$entity->deny_delete;
+        }, 'systemCheck');
+
+        return $rules;
+    }
+
+    /**
      * Method that retrieves specified user's groups.
      *
      * @param  string $userId user id
