@@ -4,12 +4,6 @@ use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
 
-Configure::write('Groups.defaultGroup', [
-    'name' => 'Everyone',
-    'deny_edit' => 1,
-    'deny_delete' => 1
-]);
-
 EventManager::instance()->on(
     'Model.afterSaveCommit',
     // Link newly created users to default group
@@ -18,7 +12,11 @@ EventManager::instance()->on(
             $table = TableRegistry::get('Groups.Groups');
             // get default group
             $group = $table->find('all', [
-                'conditions' => Configure::read('Groups.defaultGroup')
+                'conditions' => [
+                    'name' => Configure::read('Groups.defaultGroup'),
+                    'deny_edit' => 1,
+                    'deny_delete' => 1
+                ]
             ])->first();
             // need to re-fetch the user entity from the database
             // as is still considered as new and link() fails.
