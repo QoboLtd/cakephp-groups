@@ -65,6 +65,8 @@ class GroupsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->isUnique(['name']));
+
         // don't allow editing of non-editable group(s)
         $rules->addUpdate(function ($entity, $options) {
             return !$entity->deny_edit;
