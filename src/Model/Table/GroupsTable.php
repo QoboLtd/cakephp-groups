@@ -55,9 +55,30 @@ class GroupsTable extends Table
 
         $validator
             ->requirePresence('name', 'create')
-            ->notEmpty('name');
+            ->notEmpty('name')
+            ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         return $validator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['name']));
+
+        // don't allow editing of non-editable group(s)
+        $rules->addUpdate(function ($entity, $options) {
+            return !$entity->deny_edit;
+        }, 'systemCheck');
+
+        // don't allow deletion of non-deletable group(s)
+        $rules->addDelete(function ($entity, $options) {
+            return !$entity->deny_delete;
+        }, 'systemCheck');
+
+        return $rules;
     }
 
     /**
