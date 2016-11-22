@@ -22,7 +22,7 @@ class GroupShell extends Shell
         $parser = parent::getOptionParser();
 
         $parser
-            ->description('Qobo Groups Shell that handle\'s related tasks.')
+            ->description('Groups Shell that handle\'s related tasks.')
             ->addSubcommand(
                 'assign',
                 ['help' => 'Assign group to all users.', 'parser' => $this->Assign->getOptionParser()]
