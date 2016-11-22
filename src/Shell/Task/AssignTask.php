@@ -63,6 +63,7 @@ class AssignTask extends Shell
     {
         $result = $table
             ->findByName($defaultGroup)
+            // @todo this needs re-thinking as it might break on large systems
             ->contain([
                 'Users' => function ($q) {
                     return $q
