@@ -4,6 +4,9 @@ use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\ORM\TableRegistry;
 
+/**
+ * @todo This should be moved to its own file
+ */
 EventManager::instance()->on(
     'Model.afterSaveCommit',
     // Link newly created users to default group
