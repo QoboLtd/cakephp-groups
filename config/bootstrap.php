@@ -12,15 +12,14 @@ EventManager::instance()->on(
     // Link newly created users to default group
     function (Event $event, $entity) {
         if ('CakeDC/Users.Users' === $event->subject()->registryAlias()) {
+            // get default group name
+            $defaultGroupName = Configure::read('Groups.defaultGroup');
+            if (!$defaultGroupName) {
+                return;
+            }
             $table = TableRegistry::get('Groups.Groups');
-            // get default group
-            $group = $table->find('all', [
-                'conditions' => [
-                    'name' => Configure::read('Groups.defaultGroup'),
-                    'deny_edit' => 1,
-                    'deny_delete' => 1
-                ]
-            ])->first();
+            // get default group entity
+            $group = $table->findByName($defaultGroupName)->first();
 
             // skip if default group is not found
             if (!$group) {

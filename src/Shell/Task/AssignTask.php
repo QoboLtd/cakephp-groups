@@ -62,13 +62,7 @@ class AssignTask extends Shell
     protected function _getDefaultGroupEntity(Table $table, $defaultGroup)
     {
         $result = $table
-            ->find('all', [
-                'conditions' => [
-                    'name' => $defaultGroup,
-                    'deny_edit' => 1,
-                    'deny_delete' => 1
-                ]
-            ])
+            ->findByName($defaultGroup)
             ->contain([
                 'Users' => function ($q) {
                     return $q
