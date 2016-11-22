@@ -18,9 +18,16 @@ EventManager::instance()->on(
                     'deny_delete' => 1
                 ]
             ])->first();
+
+            // skip if default group is not found
+            if (!$group) {
+                return;
+            }
+
             // need to re-fetch the user entity from the database
             // as is still considered as new and link() fails.
             $user = $table->Users->get($entity->id);
+
             $table->Users->link($group, [$user]);
         }
     }
