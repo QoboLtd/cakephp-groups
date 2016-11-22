@@ -8,7 +8,7 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
- * Task for assign group to all users.
+ * Task for assign default group to all users.
  */
 class AssignTask extends Shell
 {
@@ -100,12 +100,16 @@ class AssignTask extends Shell
             }
         }
 
+        // set query conditions
+        $conditions = [];
+        if (!empty($ids)) {
+            $conditions = ['id NOT IN' => $ids];
+        }
+
         // get users not assigned to the default group
         $result = TableRegistry::get('CakeDC/Users.Users')
             ->find('all', [
-                'conditions' => [
-                    'id NOT IN' => $ids
-                ]
+                'conditions' => $conditions
             ])
             ->all();
 
