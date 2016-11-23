@@ -58,7 +58,7 @@ class ImportTask extends Shell
             [
                 'name' => 'Admins',
                 'description' => 'Administrators of the system',
-                'deny_edit' => true,
+                'deny_edit' => false,
                 'deny_delete' => true
             ],
             [
