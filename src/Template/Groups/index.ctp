@@ -16,13 +16,15 @@ echo $this->Html->scriptBlock(
 ?>
 <section class="content-header">
     <h1>Groups
-        <small>
+        <div class="pull-right">
+            <div class="btn-group btn-group-sm" role="group">
             <?= $this->Html->link(
-                '<i class="fa fa-plus"></i>',
+                '<i class="fa fa-plus"></i> ' . __('Add'),
                 ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'add'],
-                ['escape' => false]
+                ['escape' => false, 'title' => __('Add'), 'class' => 'btn btn-default']
             ); ?>
-        </small>
+            </div>
+        </div>
     </h1>
 </section>
 <section class="content">
@@ -56,6 +58,7 @@ echo $this->Html->scriptBlock(
                             ?>
                         </td>
                         <td class="actions">
+                            <div class="btn-group btn-group-xs" role="group">
                             <?= $this->Html->link(
                                 '<i class="fa fa-eye"></i>',
                                 ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'view', $group->id],
@@ -80,6 +83,7 @@ echo $this->Html->scriptBlock(
                                     ]
                                 ) ?>
                             <?php endif; ?>
+                            </div>
                         </td>
                     </tr>
                     <?php endforeach; ?>
