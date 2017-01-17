@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    <h2 class="page-header"><i class="fa fa-link"></i> <?= __('Associated Records'); ?></h2>
+    <hr />
     <div class="row">
         <div class="col-xs-12">
             <div class="nav-tabs-custom">
