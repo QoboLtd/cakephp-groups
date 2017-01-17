@@ -1,3 +1,19 @@
+<?php
+echo $this->Html->css('AdminLTE./plugins/datatables/dataTables.bootstrap', ['block' => 'css']);
+echo $this->Html->script(
+    [
+        'AdminLTE./plugins/datatables/jquery.dataTables.min',
+        'AdminLTE./plugins/datatables/dataTables.bootstrap.min'
+    ],
+    [
+        'block' => 'scriptBotton'
+    ]
+);
+echo $this->Html->scriptBlock(
+    '$(".table-datatable").DataTable({});',
+    ['block' => 'scriptBotton']
+);
+?>
 <section class="content-header">
     <h1>Groups
         <small>
@@ -11,8 +27,8 @@
 </section>
 <section class="content">
     <div class="box">
-        <div class="box-body table-responsive">
-            <table class="table table-hover table-condensed table-vertical-align">
+        <div class="box-body">
+            <table class="table table-hover table-condensed table-vertical-align table-datatable">
                 <thead>
                     <tr>
                         <th><?= $this->Paginator->sort('name') ?></th>
@@ -69,15 +85,6 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-        <div class="box-footer">
-            <div class="paginator">
-                <ul class="pagination pagination-sm no-margin pull-right">
-                    <?= $this->Paginator->prev('&laquo;', ['escape' => false]) ?>
-                    <?= $this->Paginator->numbers() ?>
-                    <?= $this->Paginator->next('&raquo;', ['escape' => false]) ?>
-                </ul>
-            </div>
         </div>
     </div>
 </section>
