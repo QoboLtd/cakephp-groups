@@ -1,5 +1,6 @@
 <?php
-echo $this->Html->css([
+echo $this->Html->css(
+    [
         'AdminLTE./plugins/select2/select2.min',
         'Groups.select2-bootstrap.min'
     ],
@@ -8,8 +9,8 @@ echo $this->Html->css([
     ]
 );
 echo $this->Html->script('AdminLTE./plugins/select2/select2.full.min', ['block' => 'scriptBotton']);
-echo $this->Html->scriptBlock('
-    $(".select2").select2({
+echo $this->Html->scriptBlock(
+    '$(".select2").select2({
         theme: "bootstrap",
         tags: "true",
         placeholder: "Select an option",
