@@ -1,15 +1,29 @@
 <?php
-$this->Form->templates([
-    'checkboxWrapper' => '{{label}}',
-    'nestingLabel' => '{{hidden}}<label class="checkbox-inline">{{input}}{{text}}</label>',
-]);
+echo $this->Html->css([
+        'AdminLTE./plugins/select2/select2.min',
+        'Groups.select2-bootstrap.min'
+    ],
+    [
+        'block' => 'css'
+    ]
+);
+echo $this->Html->script('AdminLTE./plugins/select2/select2.full.min', ['block' => 'scriptBotton']);
+echo $this->Html->scriptBlock('
+    $(".select2").select2({
+        theme: "bootstrap",
+        tags: "true",
+        placeholder: "Select an option",
+        allowClear: true
+    });',
+    ['block' => 'scriptBotton']
+);
 ?>
 <section class="content-header">
     <h1><?= __('Create {0}', ['Group']) ?></h1>
 </section>
 <section class="content">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-md-6">
             <div class="box box-solid">
                 <?= $this->Form->create($group) ?>
                 <div class="box-body">
@@ -24,12 +38,10 @@ $this->Form->templates([
                     <div class="row">
                         <div class="col-xs-12">
                             <div><?= $this->Form->label(__('Users')); ?></div>
-                            <?php foreach ($users as $k => $v) : ?>
-                                <?= $this->Form->select('users._ids', [$k => $v], [
-                                    'multiple' => 'checkbox',
-                                    'hiddenField' => false
-                                ]); ?>
-                            <?php endforeach; ?>
+                            <?= $this->Form->select('users._ids', $users, [
+                                'class' => 'select2',
+                                'multiple' => true
+                            ]); ?>
                         </div>
                     </div>
                 </div>

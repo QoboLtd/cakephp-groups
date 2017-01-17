@@ -11,7 +11,7 @@
 </section>
 <section class="content">
     <div class="box">
-        <div class="box-body table-responsive no-padding">
+        <div class="box-body table-responsive">
             <table class="table table-hover table-condensed table-vertical-align">
                 <thead>
                     <tr>
