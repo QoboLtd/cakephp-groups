@@ -18,7 +18,7 @@ class GroupsController extends AppController
      */
     public function index()
     {
-        $this->set('groups', $this->paginate($this->Groups, ['contain' => 'Users']));
+        $this->set('groups', $this->paginate($this->Groups, ['contain' => 'Users', 'maxLimit' => 500, 'limit' => 500]));
         $this->set('_serialize', ['groups']);
     }
 
