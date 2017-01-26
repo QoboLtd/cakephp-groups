@@ -84,10 +84,11 @@ class GroupsTable extends Table
     /**
      * Method that retrieves specified user's groups.
      *
-     * @param  string $userId user id
+     * @param string $userId user id
+     * @param array $options Query options
      * @return array
      */
-    public function getUserGroups($userId)
+    public function getUserGroups($userId, array $options = [])
     {
         $query = $this->find('list', [
             'keyField' => 'id',
@@ -96,6 +97,7 @@ class GroupsTable extends Table
         $query->matching('Users', function ($q) use ($userId) {
             return $q->where(['Users.id' => $userId]);
         });
+        $query->applyOptions($options);
 
         return $query->toArray();
     }
