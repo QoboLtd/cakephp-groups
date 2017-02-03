@@ -11,7 +11,7 @@
         "maiconpinto/cakephp-adminlte-theme": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
+        "phpunit/phpunit": "^5.0",
         "cakephp/cakephp-codesniffer": "dev-master"
     },
     "autoload": {
