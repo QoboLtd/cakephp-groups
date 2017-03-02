@@ -4,10 +4,8 @@
     "type": "cakephp-plugin",
     "license": "GPL-2.0",
     "require": {
-        "cakephp/cakephp": "~3.0",
-        "cakedc/users": "^4.0",
-        "muffin/trash": "^1.1",
-        "maiconpinto/cakephp-adminlte-theme": "^1.0"
+        "qobo/cakephp-utils": "^1.0",
+        "cakedc/users": "^4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0",
