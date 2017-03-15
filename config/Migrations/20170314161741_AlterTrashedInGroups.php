@@ -18,5 +18,9 @@ class AlterTrashedInGroups extends AbstractMigration
             'null' => true,
         ]);
         $table->update();
+
+        // Update existing records to set null for non-deleted ones
+        // NOTE: cast to char is needed for the mysql 5.7*!
+        $count = $this->execute('UPDATE groups SET trashed=NULL WHERE CAST(trashed AS CHAR(20)) = "0000-00-00 00:00:00"');
     }
 }
