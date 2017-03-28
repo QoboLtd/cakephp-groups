@@ -1,8 +1,12 @@
 <section class="content-header">
-    <h1><?= $this->Html->link(
-        __('Groups'),
-        ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'index']
-    ) . ' &raquo; ' . h($group->name) ?></h1>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <h4><?= $this->Html->link(
+                __('Groups'),
+                ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'index']
+            ) . ' &raquo; ' . h($group->name) ?></h4>
+        </div>
+    </div>
 </section>
 <section class="content">
     <div class="row">
