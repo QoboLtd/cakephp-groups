@@ -17,24 +17,24 @@ EventManager::instance()->on(
             return;
         }
 
-            // get default group name
-            $defaultGroupName = Configure::read('Groups.defaultGroup');
-            if (!$defaultGroupName) {
-                return;
-            }
-            $table = TableRegistry::get('Groups.Groups');
-            // get default group entity
-            $group = $table->findByName($defaultGroupName)->first();
+        // get default group name
+        $defaultGroupName = Configure::read('Groups.defaultGroup');
+        if (!$defaultGroupName) {
+            return;
+        }
+        $table = TableRegistry::get('Groups.Groups');
+        // get default group entity
+        $group = $table->findByName($defaultGroupName)->first();
 
-            // skip if default group is not found
-            if (!$group) {
-                return;
-            }
+        // skip if default group is not found
+        if (!$group) {
+            return;
+        }
 
-            // need to re-fetch the user entity from the database
-            // as is still considered as new and link() fails.
-            $user = $table->Users->get($entity->id);
+        // need to re-fetch the user entity from the database
+        // as is still considered as new and link() fails.
+        $user = $table->Users->get($entity->id);
 
-            $table->Users->link($group, [$user]);
+        $table->Users->link($group, [$user]);
     }
 );
