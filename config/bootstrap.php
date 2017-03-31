@@ -11,7 +11,12 @@ EventManager::instance()->on(
     'Model.afterSaveCommit',
     // Link newly created users to default group
     function (Event $event, $entity) {
-        if ('CakeDC/Users.Users' === $event->subject()->registryAlias()) {
+        $usersTable = Configure::read('Auth.authenticate.all.userModel');
+        $usersTable = array_merge(['CakeDC/Users.Users'], [$usersTable]);
+        if (!in_array($event->subject()->registryAlias(), $usersTable)) {
+            return;
+        }
+
             // get default group name
             $defaultGroupName = Configure::read('Groups.defaultGroup');
             if (!$defaultGroupName) {
@@ -31,6 +36,5 @@ EventManager::instance()->on(
             $user = $table->Users->get($entity->id);
 
             $table->Users->link($group, [$user]);
-        }
     }
 );
