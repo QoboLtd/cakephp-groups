@@ -54,6 +54,7 @@ echo $this->Html->scriptBlock(
                     <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary']) ?>
                 </div>
                 <?= $this->Form->end() ?>
+            </div>
         </div>
     </div>
 </section>
