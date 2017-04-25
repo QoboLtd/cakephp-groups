@@ -18,7 +18,16 @@ class GroupsController extends AppController
      */
     public function index()
     {
-        $this->set('groups', $this->paginate($this->Groups, ['contain' => 'Users', 'maxLimit' => 500, 'limit' => 500]));
+        $this->set('groups', $this->paginate($this->Groups, [
+            'contain' => [
+                'Users' => function ($q) {
+                    return $q->select(['Users.id', 'Users.username'])
+                        ->order(['Users.username' => 'ASC']);
+                }
+            ],
+            'maxLimit' => 500,
+            'limit' => 500
+        ]));
         $this->set('_serialize', ['groups']);
     }
 
@@ -32,8 +41,11 @@ class GroupsController extends AppController
     public function view($id = null)
     {
         $group = $this->Groups->get($id, [
-            'contain' => ['Users']
+            'contain' => ['Users' => function ($q) {
+                return $q->select(['Users.id', 'Users.username', 'Users.first_name', 'Users.last_name']);
+            }]
         ]);
+
         $this->set('group', $group);
         $this->set('_serialize', ['group']);
     }
