@@ -11,7 +11,8 @@ class GroupShell extends Shell
      */
     public $tasks = [
         'Groups.Assign',
-        'Groups.Import'
+        'Groups.Import',
+        'Groups.UserGroupCleanup'
     ];
 
     /**
@@ -30,6 +31,10 @@ class GroupShell extends Shell
             ->addSubcommand(
                 'import',
                 ['help' => 'Import system groups.', 'parser' => $this->Import->getOptionParser()]
+            )
+            ->addSubcommand(
+                'user_group_cleanup',
+                ['help' => 'User group clean up.', 'parser' => $this->UserGroupCleanup->getOptionParser()]
             );
 
         return $parser;
