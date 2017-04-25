@@ -57,7 +57,6 @@ echo $this->Html->scriptBlock(
                                 foreach ($group->users as $user) {
                                     $users[] = $this->Html->link($user->username, '/users/view/' . $user->id, ['class' => "label label-primary"]);
                                 }
-                                sort($users);
                                 print implode(' ', $users);
                             }
                             ?>
