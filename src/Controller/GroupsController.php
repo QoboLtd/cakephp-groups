@@ -69,7 +69,8 @@ class GroupsController extends AppController
             }
         }
         $users = $this->Groups->Users->find('list', ['limit' => 500]);
-        $this->set(compact('group', 'users'));
+        $remoteGroups = $this->Groups->getRemoteGroups();
+        $this->set(compact('group', 'users', 'remoteGroups'));
         $this->set('_serialize', ['group']);
     }
 
@@ -96,7 +97,8 @@ class GroupsController extends AppController
             }
         }
         $users = $this->Groups->Users->find('list', ['limit' => 500]);
-        $this->set(compact('group', 'users'));
+        $remoteGroups = $this->Groups->getRemoteGroups();
+        $this->set(compact('group', 'users', 'remoteGroups'));
         $this->set('_serialize', ['group']);
     }
 
