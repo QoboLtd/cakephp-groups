@@ -41,13 +41,21 @@ echo $this->Html->scriptBlock(
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-<?= !empty($remoteGroups) ? 6 : 12 ?>">
                             <div><?= $this->Form->label(__('Users')); ?></div>
                             <?= $this->Form->select('users._ids', $users, [
                                 'class' => 'select2',
                                 'multiple' => true
                             ]); ?>
                         </div>
+                        <?php if (!empty($remoteGroups)) : ?>
+                            <div class="col-xs-6">
+                                <div><?= $this->Form->label(__('Remote Group')); ?></div>
+                                <?= $this->Form->select('remote_group_id', $remoteGroups, [
+                                    'class' => 'select2'
+                                ]); ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="box-footer">
