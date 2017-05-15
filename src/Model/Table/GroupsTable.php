@@ -137,17 +137,45 @@ class GroupsTable extends Table
             return $result;
         }
 
-        $ldapConfig = (array)Configure::read('Groups.remoteGroups.LDAP');
-        if (empty(array_diff($this->_ldapRequiredParams, array_keys($ldapConfig)))) {
-            $connection = $this->_ldapConnect($ldapConfig);
-            if (!$connection) {
-                return $result;
-            }
-
-            $result = $this->_getLdapGroups($connection, $ldapConfig);
+        if ((bool)Configure::read('Groups.remoteGroups.LDAP.enabled')) {
+            $result = $this->_getLdapGroups();
         }
 
         return $result;
+    }
+
+    /**
+     * Fetch LDAP groups.
+     *
+     * @return array
+     */
+    protected function _getLdapGroups()
+    {
+        $result = [];
+
+        $config = (array)Configure::read('Groups.remoteGroups.LDAP');
+        if (!empty(array_diff($this->_ldapRequiredParams, array_keys($config)))) {
+            return $result;
+        }
+
+        $connection = $this->_ldapConnect($config);
+        if (!$connection) {
+            return $result;
+        }
+
+        try {
+            $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
+
+            $result = ldap_get_entries($connection, $search);
+        } catch (Exception $e) {
+            Log::critical('Failed to query AD: ' . $e->getMessage());
+        }
+
+        if (empty($result)) {
+            return $result;
+        }
+
+        return $this->_normalizeResult($result);
     }
 
     /**
@@ -175,31 +203,6 @@ class GroupsTable extends Table
         }
 
         return $connection;
-    }
-
-    /**
-     * Fetch LDAP groups.
-     *
-     * @param resource $connection LDAP connection
-     * @param array $config LDAP configuration
-     * @return array
-     */
-    protected function _getLdapGroups($connection, array $config)
-    {
-        $data = [];
-        try {
-            $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
-
-            $data = ldap_get_entries($connection, $search);
-        } catch (Exception $e) {
-            Log::critical('Failed to query AD: ' . $e->getMessage());
-        }
-
-        if (empty($data)) {
-            return $data;
-        }
-
-        return $this->_normalizeResult($data);
     }
 
     /**
