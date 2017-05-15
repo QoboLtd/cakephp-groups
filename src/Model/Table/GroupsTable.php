@@ -58,6 +58,10 @@ class GroupsTable extends Table
             ->notEmpty('name')
             ->add('name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
+        $validator
+            ->requirePresence('remote_group_id', 'create')
+            ->allowEmpty('remote_group_id');
+
         return $validator;
     }
 
