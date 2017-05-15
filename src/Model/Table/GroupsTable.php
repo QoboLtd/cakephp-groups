@@ -26,7 +26,6 @@ class GroupsTable extends Table
         'baseDn',
         'username',
         'password',
-        'groupsAttributes',
         'groupsFilter'
     ];
 
@@ -164,7 +163,7 @@ class GroupsTable extends Table
     {
         $data = [];
         try {
-            $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], $config['groupsAttributes']);
+            $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
 
             $data = ldap_get_entries($connection, $search);
         } catch (Exception $e) {
@@ -175,37 +174,23 @@ class GroupsTable extends Table
             return $data;
         }
 
-        return $this->_normalizeResult($data, $config);
+        return $this->_normalizeResult($data);
     }
 
-    protected function _normalizeResult($data, array $config)
+    protected function _normalizeResult($data)
     {
-        $fields = ['member', 'memberof'];
         $result = [];
-
         for ($i = 0; $i < $data['count']; $i++) {
             $item = $data[$i];
 
-            $result[$item['dn']] = [];
-            foreach ($config['groupsAttributes'] as $attribute) {
-                if (in_array($attribute, $fields)) {
-                    if (!isset($item[$attribute]) || !isset($item[$attribute]['count'])) {
-                        $result[$item['dn']][$attribute] = [];
-                        continue;
-                    }
-                    $result[$item['dn']][$attribute] = [];
-                    for ($j = 0; $j < $item[$attribute]['count']; $j++) {
-                        $result[$item['dn']][$attribute][] = $item[$attribute][$j];
-                    }
-                } else {
-                    if (!isset($item[$attribute]) || !isset($item[$attribute][0])) {
-                        $result[$item['dn']][$field] = null;
-                        continue;
-                    }
-                    $result[$item['dn']][$attribute] = $item[$attribute][0];
-                }
-            }
+            // construct label
+            preg_match('/^.*?,OU=(.*?),/i', $item['dn'], $match);
+            $label = !empty($match[1]) ? $match[1] . ' / ' . $item['cn'][0] : $item['cn'][0];
+
+            $result[$item['dn']] = $label;
         }
+
+        asort($result);
 
         return $result;
     }
