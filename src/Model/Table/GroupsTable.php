@@ -119,6 +119,11 @@ class GroupsTable extends Table
         return $query->toArray();
     }
 
+    /**
+     * Fetch remote groups.
+     *
+     * @return array
+     */
     public function getRemoteGroups()
     {
         $result = [];
@@ -140,14 +145,22 @@ class GroupsTable extends Table
         return $result;
     }
 
+    /**
+     * Connect to LDAP server.
+     *
+     * @param array $config LDAP configuration
+     * @return LDAP connection
+     */
     protected function _ldapConnect(array $config)
     {
         try {
             $connection = @ldap_connect($config['host'], $config['port']);
+
             // set LDAP options
             ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
             ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
             ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
+
             $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
             if (!$bind) {
                 Log::critical('Cannot bind with user: ' . $config['username']);
@@ -159,6 +172,13 @@ class GroupsTable extends Table
         return $connection;
     }
 
+    /**
+     * Fetch LDAP groups.
+     *
+     * @param resource $connection LDAP connection
+     * @param array $config LDAP configuration
+     * @return array
+     */
     protected function _getLdapGroups($connection, array $config)
     {
         $data = [];
@@ -177,6 +197,12 @@ class GroupsTable extends Table
         return $this->_normalizeResult($data);
     }
 
+    /**
+     * Normalizes LDAP result.
+     *
+     * @param array $data LDAP result
+     * @return array
+     */
     protected function _normalizeResult($data)
     {
         $result = [];
