@@ -18,6 +18,11 @@ use Groups\Model\Entity\Group;
  */
 class GroupsTable extends Table
 {
+    /**
+     * LDAP required parameters.
+     *
+     * @var array
+     */
     protected $_ldapRequiredParams = [
         'host',
         'port',
