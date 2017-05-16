@@ -31,6 +31,11 @@ EventManager::instance()->on(
             return;
         }
 
+        // skip existing users
+        if (!$entity->isNew()) {
+            return;
+        }
+
         // get default group name
         $defaultGroupName = Configure::read('Groups.defaultGroup');
         if (!$defaultGroupName) {
