@@ -12,7 +12,8 @@ class GroupShell extends Shell
     public $tasks = [
         'Groups.Assign',
         'Groups.Import',
-        'Groups.UserGroupCleanup'
+        'Groups.UserGroupCleanup',
+        'Groups.SyncLdapGroups'
     ];
 
     /**
@@ -35,6 +36,10 @@ class GroupShell extends Shell
             ->addSubcommand(
                 'user_group_cleanup',
                 ['help' => 'User group clean up.', 'parser' => $this->UserGroupCleanup->getOptionParser()]
+            )
+            ->addSubcommand(
+                'sync_ldap_groups',
+                ['help' => 'LDAP groups synchronization.', 'parser' => $this->SyncLdapGroups->getOptionParser()]
             );
 
         return $parser;
