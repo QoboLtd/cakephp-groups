@@ -8,7 +8,7 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
- * Task for assign default group to all users.
+ * Task for duplicated user entries cleanup.
  */
 class UserGroupCleanupTask extends Shell
 {
