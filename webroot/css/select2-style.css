@@ -1,0 +1,10 @@
+.select2-container--bootstrap .select2-selection--single,
+.select2-container--bootstrap .select2-selection--multiple {
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de;
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    margin: 0;
+}

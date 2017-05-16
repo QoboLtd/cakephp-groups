@@ -2,7 +2,8 @@
 echo $this->Html->css(
     [
         'AdminLTE./plugins/select2/select2.min',
-        'Groups.select2-bootstrap.min'
+        'Groups.select2-bootstrap.min',
+        'Groups.select2-style'
     ],
     [
         'block' => 'css'
@@ -12,8 +13,7 @@ echo $this->Html->script('AdminLTE./plugins/select2/select2.full.min', ['block' 
 echo $this->Html->scriptBlock(
     '$(".select2").select2({
         theme: "bootstrap",
-        tags: "true",
-        placeholder: "Select an option",
+        placeholder: " -- Please choose -- ",
         allowClear: true
     });',
     ['block' => 'scriptBotton']
@@ -52,6 +52,7 @@ echo $this->Html->scriptBlock(
                             <div class="col-xs-6">
                                 <div><?= $this->Form->label(__('Remote Group')); ?></div>
                                 <?= $this->Form->select('remote_group_id', $remoteGroups, [
+                                    'empty' => true,
                                     'class' => 'select2'
                                 ]); ?>
                             </div>
