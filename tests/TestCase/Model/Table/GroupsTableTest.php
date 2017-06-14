@@ -61,6 +61,24 @@ class GroupsTableTest extends TestCase
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $validator = new \Cake\Validation\Validator();
+        $result = $this->Groups->validationDefault($validator);
+
+        $this->assertInstanceOf('\Cake\Validation\Validator', $result);
+
+        $data = ['name' => 'Foobar'];
+
+        $entity = $this->Groups->newEntity($data);
+        $this->assertEmpty($entity->errors());
+    }
+
+    public function testSave()
+    {
+        $data = ['name' => 'Foobar'];
+
+        $entity = $this->Groups->newEntity($data);
+        $result = $this->Groups->save($entity);
+
+        $this->assertNotEmpty($result->get('id'));
     }
 }
