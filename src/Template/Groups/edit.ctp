@@ -52,6 +52,7 @@ echo $this->Html->scriptBlock(
                             <div class="col-xs-6">
                                 <div><?= $this->Form->label(__('Remote Group')); ?></div>
                                 <?= $this->Form->select('remote_group_id', $remoteGroups, [
+                                    'empty' => true,
                                     'class' => 'select2'
                                 ]); ?>
                             </div>
