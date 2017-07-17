@@ -106,8 +106,10 @@ class SyncLdapGroupsTask extends Shell
     protected function _getGroups(Table $table)
     {
         $query = $table->find('all')
-            ->where('remote_group_id IS NOT NULL')
-            ->contain('Users');
+            ->where(['remote_group_id IS NOT NULL', 'remote_group_id !=' => ''])
+            ->contain(['Users' => function ($q) {
+                return $q->select(['Users.username']);
+            }]);
 
         return $query->all();
     }
