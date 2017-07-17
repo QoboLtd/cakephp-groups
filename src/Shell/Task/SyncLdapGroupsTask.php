@@ -218,6 +218,12 @@ class SyncLdapGroupsTask extends Shell
             $userIds[] = $user->id;
         }
 
+        if (!empty($group->users)) {
+            foreach ($group->users as $user) {
+                $userIds[] = $user->id;
+            }
+        }
+
         $data = [
             'users' => [
                 '_ids' => $userIds
