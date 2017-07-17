@@ -5,6 +5,7 @@ use CakeDC\Users\Controller\Traits\CustomUsersTableTrait;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -54,8 +55,10 @@ class SyncLdapGroupsTask extends Shell
             $this->abort('Required parameters are missing: ' . implode(', ', $diff) . '.');
         }
 
-        $groups = $this->_getGroups();
-        if (empty($groups)) {
+        $groupsTable = TableRegistry::get('Groups.Groups');
+
+        $groups = $this->_getGroups($groupsTable);
+        if ($groups->isEmpty()) {
             $this->abort('No mapped system groups found.');
         }
 
@@ -97,11 +100,11 @@ class SyncLdapGroupsTask extends Shell
     /**
      * Fetch system groups which are mapped to LDAP group.
      *
+     * @param \Cake\ORM\Table $table Table instance
      * @return array
      */
-    protected function _getGroups()
+    protected function _getGroups(Table $table)
     {
-        $table = TableRegistry::get('Groups.Groups');
         $query = $table->find('all')
             ->where('remote_group_id IS NOT NULL')
             ->contain('Users');
@@ -195,14 +198,13 @@ class SyncLdapGroupsTask extends Shell
     /**
      * Synchronizes group users based on mapped LDAP group users.
      *
+     * @param \Cake\ORM\Table $table Table instance
      * @param \Cake\Datasource\EntityInterface $group Group entity
      * @param array $users Group users
      * @return void
      */
-    protected function _syncGroupUsers(EntityInterface $group, array $users)
+    protected function _syncGroupUsers(Table $table, EntityInterface $group, array $users)
     {
-        $table = TableRegistry::get('Groups.Groups');
-
         // unlink existing users
         if (!empty($group->users)) {
             $table->Users->unlink($group, $group->users);
