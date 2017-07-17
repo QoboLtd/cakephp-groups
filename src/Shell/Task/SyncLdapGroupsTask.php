@@ -72,26 +72,32 @@ class SyncLdapGroupsTask extends Shell
         foreach ($groups as $group) {
             $filter = substr($config['filter'], 0, -1) . '(memberof=' . $group->remote_group_id . '))';
 
-            $data = [];
-            try {
-                $search = ldap_search($connection, $config['baseDn'], $filter, ['userprincipalname']);
+            $cookie = '';
+            $success = true;
+            do {
+                try {
+                    ldap_control_paged_result($connection, 20, true, $cookie);
 
-                $data = ldap_get_entries($connection, $search);
-            } catch (Exception $e) {
-                $this->abort('Failed to query AD: ' . $e->getMessage() . '.');
+                    $search = ldap_search($connection, $config['baseDn'], $filter, ['userprincipalname']);
+                    $data = ldap_get_entries($connection, $search);
+                } catch (Exception $e) {
+                    $this->abort('Failed to query AD: ' . $e->getMessage() . '.');
+                }
+
+                $users = $this->_getUsers($data, $domain);
+
+                if (!$this->_syncGroupUsers($groupsTable, $group, $users)) {
+                    $success = false;
+                }
+
+                ldap_control_paged_result_response($connection, $search, $cookie);
+            } while (!empty($cookie));
+
+            if ($success) {
+                $this->info('Group ' . $group->name . ' synced successfully.');
+            } else {
+                $this->warn('Group ' . $group->name . ' failed to sync.');
             }
-
-            if (empty($data)) {
-                continue;
-            }
-
-            $users = $this->_getUsers($data, $domain);
-
-            if (empty($users)) {
-                continue;
-            }
-
-            $this->_syncGroupUsers($group, $users);
         }
 
         $this->success('Synchronization completed.');
