@@ -209,7 +209,7 @@ class SyncLdapGroupsTask extends Shell
      * @param \Cake\ORM\Table $table Table instance
      * @param \Cake\Datasource\EntityInterface $group Group entity
      * @param array $users Group users
-     * @return void
+     * @return bool
      */
     protected function _syncGroupUsers(Table $table, EntityInterface $group, array $users)
     {
@@ -226,10 +226,6 @@ class SyncLdapGroupsTask extends Shell
 
         $group = $table->patchEntity($group, $data);
 
-        if ($table->save($group)) {
-            $this->info('Group ' . $group->name . ' synced successfully.');
-        } else {
-            $this->warn('Group ' . $group->name . ' failed to sync.');
-        }
+        return $table->save($group);
     }
 }
