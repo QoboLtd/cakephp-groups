@@ -207,11 +207,6 @@ class SyncLdapGroupsTask extends Shell
      */
     protected function _syncGroupUsers(Table $table, EntityInterface $group, array $users)
     {
-        // unlink existing users
-        if (!empty($group->users)) {
-            $table->Users->unlink($group, $group->users);
-        }
-
         $userIds = [];
         foreach ($users as $user) {
             $userIds[] = $user->id;
