@@ -5,6 +5,7 @@ use CakeDC\Users\Controller\Traits\CustomUsersTableTrait;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -54,8 +55,10 @@ class SyncLdapGroupsTask extends Shell
             $this->abort('Required parameters are missing: ' . implode(', ', $diff) . '.');
         }
 
-        $groups = $this->_getGroups();
-        if (empty($groups)) {
+        $groupsTable = TableRegistry::get('Groups.Groups');
+
+        $groups = $this->_getGroups($groupsTable);
+        if ($groups->isEmpty()) {
             $this->abort('No mapped system groups found.');
         }
 
@@ -69,26 +72,32 @@ class SyncLdapGroupsTask extends Shell
         foreach ($groups as $group) {
             $filter = substr($config['filter'], 0, -1) . '(memberof=' . $group->remote_group_id . '))';
 
-            $data = [];
-            try {
-                $search = ldap_search($connection, $config['baseDn'], $filter, ['userprincipalname']);
+            $cookie = '';
+            $success = true;
+            do {
+                try {
+                    ldap_control_paged_result($connection, 20, true, $cookie);
 
-                $data = ldap_get_entries($connection, $search);
-            } catch (Exception $e) {
-                $this->abort('Failed to query AD: ' . $e->getMessage() . '.');
+                    $search = ldap_search($connection, $config['baseDn'], $filter, ['userprincipalname']);
+                    $data = ldap_get_entries($connection, $search);
+                } catch (Exception $e) {
+                    $this->abort('Failed to query AD: ' . $e->getMessage() . '.');
+                }
+
+                $users = $this->_getUsers($data, $domain);
+
+                if (!$this->_syncGroupUsers($groupsTable, $group, $users)) {
+                    $success = false;
+                }
+
+                ldap_control_paged_result_response($connection, $search, $cookie);
+            } while (!empty($cookie));
+
+            if ($success) {
+                $this->info('Group ' . $group->name . ' synced successfully.');
+            } else {
+                $this->warn('Group ' . $group->name . ' failed to sync.');
             }
-
-            if (empty($data)) {
-                continue;
-            }
-
-            $users = $this->_getUsers($data, $domain);
-
-            if (empty($users)) {
-                continue;
-            }
-
-            $this->_syncGroupUsers($group, $users);
         }
 
         $this->success('Synchronization completed.');
@@ -97,14 +106,16 @@ class SyncLdapGroupsTask extends Shell
     /**
      * Fetch system groups which are mapped to LDAP group.
      *
+     * @param \Cake\ORM\Table $table Table instance
      * @return array
      */
-    protected function _getGroups()
+    protected function _getGroups(Table $table)
     {
-        $table = TableRegistry::get('Groups.Groups');
         $query = $table->find('all')
-            ->where('remote_group_id IS NOT NULL')
-            ->contain('Users');
+            ->where(['remote_group_id IS NOT NULL', 'remote_group_id !=' => ''])
+            ->contain(['Users' => function ($q) {
+                return $q->select(['Users.username']);
+            }]);
 
         return $query->all();
     }
@@ -195,22 +206,22 @@ class SyncLdapGroupsTask extends Shell
     /**
      * Synchronizes group users based on mapped LDAP group users.
      *
+     * @param \Cake\ORM\Table $table Table instance
      * @param \Cake\Datasource\EntityInterface $group Group entity
      * @param array $users Group users
-     * @return void
+     * @return bool
      */
-    protected function _syncGroupUsers(EntityInterface $group, array $users)
+    protected function _syncGroupUsers(Table $table, EntityInterface $group, array $users)
     {
-        $table = TableRegistry::get('Groups.Groups');
-
-        // unlink existing users
-        if (!empty($group->users)) {
-            $table->Users->unlink($group, $group->users);
-        }
-
         $userIds = [];
         foreach ($users as $user) {
             $userIds[] = $user->id;
+        }
+
+        if (!empty($group->users)) {
+            foreach ($group->users as $user) {
+                $userIds[] = $user->id;
+            }
         }
 
         $data = [
@@ -221,10 +232,6 @@ class SyncLdapGroupsTask extends Shell
 
         $group = $table->patchEntity($group, $data);
 
-        if ($table->save($group)) {
-            $this->info('Group ' . $group->name . ' synced successfully.');
-        } else {
-            $this->warn('Group ' . $group->name . ' failed to sync.');
-        }
+        return $table->save($group);
     }
 }
