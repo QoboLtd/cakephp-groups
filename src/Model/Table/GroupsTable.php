@@ -23,7 +23,7 @@ class GroupsTable extends Table
      *
      * @var array
      */
-    protected $_ldapRequiredParams = [
+    protected $ldapRequiredParams = [
         'host',
         'port',
         'version',
@@ -150,7 +150,7 @@ class GroupsTable extends Table
         $result = [];
 
         $config = (array)Configure::read('Groups.remoteGroups.LDAP');
-        if (!empty(array_diff($this->_ldapRequiredParams, array_keys($config)))) {
+        if (!empty(array_diff($this->ldapRequiredParams, array_keys($config)))) {
             return $result;
         }
 
