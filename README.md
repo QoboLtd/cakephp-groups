@@ -7,6 +7,12 @@
 [![License](https://poser.pugx.org/qobo/cakephp-groups/license)](https://packagist.org/packages/qobo/cakephp-groups)
 [![codecov](https://codecov.io/gh/QoboLtd/cakephp-groups/branch/master/graph/badge.svg)](https://codecov.io/gh/QoboLtd/cakephp-groups)
 
+## About
+
+CakePHP 3+ plugin for managing user groups.
+
+Developed by [Qobo](https://www.qobo.biz), used in [Qobrix](https://qobrix.com).
+
 ## Installation
 
 You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
