@@ -111,6 +111,7 @@ class_alias($pluginName . '\Test\App\Controller\AppController', 'App\Controller\
 $loadPluginRoutes = file_exists(dirname(__FILE__) . DS . 'config' . DS . 'routes.php');
 $loadPluginBootstrap = file_exists(dirname(__FILE__) . DS . 'config' . DS . 'bootstrap.php');
 Cake\Core\Plugin::load($pluginName, ['path' => ROOT . DS, 'autoload' => true, 'routes' => $loadPluginRoutes, 'bootstrap' => $loadPluginBootstrap]);
+Cake\Core\Plugin::load('CakeDC/Users', ['routes' => true, 'bootstrap' => true]);
 
 Cake\Routing\DispatcherFactory::add('Routing');
 Cake\Routing\DispatcherFactory::add('ControllerFactory');

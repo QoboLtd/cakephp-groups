@@ -13,12 +13,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Groups\\": "src"
+            "Groups\\": "src",
+            "CakeDC\\Users\\Test\\Fixture\\": "tests"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Groups\\Test\\": "tests",
+            "CakeDC\\Users\\Test\\": "./vendor/cakedc/users/tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }

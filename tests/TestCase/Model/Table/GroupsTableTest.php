@@ -1,6 +1,8 @@
 <?php
 namespace Groups\Test\TestCase\Model\Table;
 
+use Cake\Core\Configure;
+use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Model\Table\GroupsTable;
@@ -18,6 +20,8 @@ class GroupsTableTest extends TestCase
      */
     public $fixtures = [
         'plugin.groups.groups',
+        'plugin.groups.groups_users',
+        'plugin.CakeDC/Users.users',
     ];
 
     /**
@@ -51,7 +55,10 @@ class GroupsTableTest extends TestCase
      */
     public function testInitialize()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->assertTrue($this->Groups->hasBehavior('Timestamp'));
+        $this->assertTrue($this->Groups->hasBehavior('Trash'));
+        $this->assertInstanceOf(BelongsToMany::class, $this->Groups->association('Users'));
+        $this->assertInstanceOf(GroupsTable::class, $this->Groups);
     }
 
     /**
@@ -80,5 +87,50 @@ class GroupsTableTest extends TestCase
         $result = $this->Groups->save($entity);
 
         $this->assertNotEmpty($result->get('id'));
+    }
+
+    public function testGetUserGroups()
+    {
+        $result = $this->Groups->getUserGroups('00000000-0000-0000-0000-000000000001');
+
+        $this->assertInternalType('array', $result);
+        $this->assertEquals(1, count($result));
+    }
+
+    public function testGetRemoteGroupsDummyConfig()
+    {
+        Configure::write('Groups.remoteGroups.enabled', true);
+        Configure::write('Groups.remoteGroups.LDAP', [
+            'enabled' => true,
+            'host' => 'ldaps://127.0.0.1',
+            'port' => 987,
+            'version' => 3,
+            'domain' => 'foobar',
+            'baseDn' => '',
+            'username' => 'foo',
+            'password' => 'foo',
+            'groupsFilter' => '(objectclass=group)'
+        ]);
+        $result = $this->Groups->getRemoteGroups();
+
+        $this->assertInternalType('array', $result);
+        $this->assertEmpty($result);
+    }
+
+    public function testGetRemoteGroupsNotEnabled()
+    {
+        $result = $this->Groups->getRemoteGroups();
+
+        $this->assertInternalType('array', $result);
+        $this->assertEmpty($result);
+    }
+
+    public function testSaveGroupWithExistingName()
+    {
+        $entity = $this->Groups->newEntity();
+        $entity = $this->Groups->patchEntity($entity, ['name' => 'Lorem ipsum dolor sit amet']);
+
+        $this->assertFalse($this->Groups->save($entity));
+        $this->assertNotEmpty($entity->errors());
     }
 }
