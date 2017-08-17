@@ -21,9 +21,14 @@ class AssignTaskTest extends TestCase
         $this->Groups = TableRegistry::get('Groups.Groups');
         $this->Users = TableRegistry::get('CakeDC/Users.Users');
 
-        $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock('Groups\Shell\Task\AssignTask', ['in', 'out', 'err', '_stop'], [$this->io]);
+        $this->Task = $this->getMockBuilder('Groups\Shell\Task\AssignTask')
+            ->setMethods(['in', 'out', 'err', '_stop'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
 
         Configure::load('Groups.groups');
     }

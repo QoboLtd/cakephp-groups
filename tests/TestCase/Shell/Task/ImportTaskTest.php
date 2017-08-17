@@ -17,9 +17,14 @@ class ImportTaskTest extends TestCase
 
         $this->Groups = TableRegistry::get('Groups.Groups');
 
-        $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock('Groups\Shell\Task\ImportTask', ['in', 'out', 'err', '_stop'], [$this->io]);
+        $this->Task = $this->getMockBuilder('Groups\Shell\Task\ImportTask')
+            ->setMethods(['in', 'out', 'err', '_stop'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
     }
 
     public function tearDown()
