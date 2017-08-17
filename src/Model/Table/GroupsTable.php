@@ -183,7 +183,7 @@ class GroupsTable extends Table
     protected function _ldapConnect(array $config)
     {
         try {
-            $connection = @\ldap_connect($config['host'], $config['port']);
+            $connection = @ldap_connect($config['host'], $config['port']);
 
             // set LDAP options
             ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
