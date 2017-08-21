@@ -9,15 +9,14 @@ echo $this->Html->css(
         'block' => 'css'
     ]
 );
-echo $this->Html->script('AdminLTE./plugins/select2/select2.full.min', ['block' => 'scriptBottom']);
-echo $this->Html->scriptBlock(
-    '$(".select2").select2({
-        width: "100%",
-        theme: "bootstrap",
-        placeholder: " -- Please choose -- ",
-        allowClear: true
-    });',
-    ['block' => 'scriptBottom']
+echo $this->Html->script(
+    [
+        'AdminLTE./plugins/select2/select2.full.min',
+        'Qobo/Utils.select2.init'
+    ],
+    [
+        'block' => 'scriptBottom'
+    ]
 );
 ?>
 <section class="content-header">
