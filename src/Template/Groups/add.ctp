@@ -9,14 +9,15 @@ echo $this->Html->css(
         'block' => 'css'
     ]
 );
-echo $this->Html->script('AdminLTE./plugins/select2/select2.full.min', ['block' => 'scriptBotton']);
+echo $this->Html->script('AdminLTE./plugins/select2/select2.full.min', ['block' => 'scriptBottom']);
 echo $this->Html->scriptBlock(
     '$(".select2").select2({
+        width: "100%",
         theme: "bootstrap",
         placeholder: " -- Please choose -- ",
         allowClear: true
     });',
-    ['block' => 'scriptBotton']
+    ['block' => 'scriptBottom']
 );
 ?>
 <section class="content-header">
