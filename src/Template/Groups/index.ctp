@@ -8,7 +8,7 @@ echo $this->Html->script(
         'AdminLTE./plugins/datatables/dataTables.bootstrap.min'
     ],
     [
-        'block' => 'scriptBotton'
+        'block' => 'scriptBottom'
     ]
 );
 
@@ -17,7 +17,7 @@ echo $this->Html->scriptBlock(
         stateSave: true,
         stateDuration: ' . (int)(Configure::read('Session.timeout') * 60) . '
     });',
-    ['block' => 'scriptBotton']
+    ['block' => 'scriptBottom']
 );
 ?>
 <section class="content-header">
