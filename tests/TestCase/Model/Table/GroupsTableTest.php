@@ -18,6 +18,8 @@ class GroupsTableTest extends TestCase
      */
     public $fixtures = [
         'plugin.groups.groups',
+        'plugin.groups.users',
+        'plugin.groups.groups_users',
     ];
 
     /**
@@ -80,5 +82,28 @@ class GroupsTableTest extends TestCase
         $result = $this->Groups->save($entity);
 
         $this->assertNotEmpty($result->get('id'));
+    }
+
+    public function testGetUserGroups()
+    {
+        $userId = '00000000-0000-0000-0000-000000000001';
+        $result = $this->Groups->getUserGroups($userId);
+        $values = array_values($result);
+
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+        $this->assertTrue(!is_object($values[0]));
+    }
+
+    public function testGetUserGroupsAll()
+    {
+        $userId = '00000000-0000-0000-0000-000000000001';
+
+        $result = $this->Groups->getUserGroupsAll($userId);
+        $values = array_values($result);
+
+        $this->assertNotEmpty($result);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(is_object($values[0]));
     }
 }
