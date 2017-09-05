@@ -21,6 +21,9 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_install:
+  - echo "extension=ldap.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 install:
   - composer install --no-interaction --no-progress --no-suggest
   - mkdir -p build/logs

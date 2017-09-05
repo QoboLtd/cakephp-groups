@@ -40,7 +40,7 @@ class GroupsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => '959b9de4-07c7-4032-a9a0-0d075ca2c633',
+            'id' => '00000000-0000-0000-0000-000000000001',
             'name' => 'Lorem ipsum dolor sit amet',
             'remote_group_id' => null,
             'created' => '2016-02-04 11:12:29',

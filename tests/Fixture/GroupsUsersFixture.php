@@ -38,7 +38,7 @@ class GroupsUsersFixture extends TestFixture
     public $records = [
         [
             'id' => '00000000-0000-0000-0000-000000000001',
-            'group_id' => '959b9de4-07c7-4032-a9a0-0d075ca2c633',
+            'group_id' => '00000000-0000-0000-0000-000000000001',
             'user_id' => '00000000-0000-0000-0000-000000000001'
         ],
     ];
