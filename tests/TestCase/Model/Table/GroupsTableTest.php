@@ -97,6 +97,17 @@ class GroupsTableTest extends TestCase
         $this->assertEquals(1, count($result));
     }
 
+    public function testGetUserGroupsAll()
+    {
+        $userId = '00000000-0000-0000-0000-000000000001';
+
+        $result = $this->Groups->getUserGroupsAll($userId);
+
+        $this->assertInternalType('array', $result);
+        $this->assertEquals(1, count($result));
+        $this->assertInstanceOf('Groups\Model\Entity\Group', $result[0]);
+    }
+
     public function testGetRemoteGroupsDummyConfig()
     {
         Configure::write('Groups.remoteGroups.enabled', true);

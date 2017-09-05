@@ -100,7 +100,7 @@ class GroupsTable extends Table
     }
 
     /**
-     * Method that retrieves specified user's groups.
+     * Method that retrieves specified user's groups as list.
      *
      * @param string $userId user id
      * @param array $options Query options
@@ -112,6 +112,25 @@ class GroupsTable extends Table
             'keyField' => 'id',
             'valueField' => 'name'
         ]);
+        $query->matching('Users', function ($q) use ($userId) {
+            return $q->where(['Users.id' => $userId]);
+        });
+        $query->applyOptions($options);
+
+        return $query->toArray();
+    }
+
+    /**
+     * Method that retrieves specified user's groups.
+     *
+     * @param string $userId user id
+     * @param array $options Query options
+     * @return array
+     */
+    public function getUserGroupsAll($userId, array $options = [])
+    {
+        $query = $this->find('all');
+
         $query->matching('Users', function ($q) use ($userId) {
             return $q->where(['Users.id' => $userId]);
         });
