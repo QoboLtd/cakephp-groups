@@ -81,7 +81,7 @@ class GroupsTableTest extends TestCase
 
     public function testSave()
     {
-        $data = ['name' => 'Foobar'];
+        $data = ['name' => 'Foobar', 'description' => 'Foobar group', 'deny_edit' => false, 'deny_delete' => false];
 
         $entity = $this->Groups->newEntity($data);
         $result = $this->Groups->save($entity);

@@ -50,7 +50,7 @@ class GroupsControllerTest extends IntegrationTestCase
 
         $groups = $this->viewVariable('groups');
         $this->assertInstanceOf(ResultSet::class, $groups);
-        $this->assertEquals(1, $groups->count());
+        $this->assertEquals(3, $groups->count());
     }
 
     public function testView()
@@ -68,7 +68,7 @@ class GroupsControllerTest extends IntegrationTestCase
     {
         $expected = 1 + $this->Groups->find('all')->count();
 
-        $data = ['name' => 'Test group'];
+        $data = ['name' => 'Test', 'description' => 'Test group', 'deny_edit' => false, 'deny_delete' => false];
 
         $this->post('/groups/groups/add', $data);
 
@@ -151,7 +151,7 @@ class GroupsControllerTest extends IntegrationTestCase
 
     public function testDelete()
     {
-        $expected = 1 - $this->Groups->find('all')->count();
+        $expected = $this->Groups->find('all')->count() - 1;
 
         $id = '00000000-0000-0000-0000-000000000001';
 
