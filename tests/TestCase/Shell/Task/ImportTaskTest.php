@@ -38,11 +38,11 @@ class ImportTaskTest extends TestCase
 
     public function testMain()
     {
-        $query = $this->Groups->find()->where(['name' => 'Admins']);
-        $this->assertTrue($query->isEmpty());
+        $group = $this->Groups->find()->where(['name' => 'Admins'])->first();
+        $this->Groups->delete($group);
 
-        $query = $this->Groups->find()->where(['name' => 'Everyone']);
-        $this->assertTrue($query->isEmpty());
+        $group = $this->Groups->find()->where(['name' => 'Everyone'])->first();
+        $this->Groups->delete($group);
 
         $this->Task->main();
 
