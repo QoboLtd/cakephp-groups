@@ -17,6 +17,7 @@ use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Exception;
 
 /**
  * Task for synchronizing ldap groups.
@@ -134,7 +135,7 @@ class SyncLdapGroupsTask extends Shell
      * Connect to LDAP server.
      *
      * @param array $config LDAP configuration
-     * @return LDAP connection
+     * @return resource LDAP connection
      */
     protected function _ldapConnect(array $config)
     {

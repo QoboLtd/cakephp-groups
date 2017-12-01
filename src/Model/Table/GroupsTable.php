@@ -207,7 +207,7 @@ class GroupsTable extends Table
      * Connect to LDAP server.
      *
      * @param array $config LDAP configuration
-     * @return LDAP connection
+     * @return resource LDAP connection
      */
     protected function _ldapConnect(array $config)
     {
