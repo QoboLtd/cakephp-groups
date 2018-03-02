@@ -49,7 +49,7 @@ echo $this->Html->scriptBlock(
     </div>
 </section>
 <section class="content">
-    <div class="box box-solid">
+    <div class="box box-primary">
         <div class="box-body">
             <table class="table table-hover table-condensed table-vertical-align table-datatable">
                 <thead>
