@@ -12,22 +12,23 @@
 namespace Groups\Shell\Task;
 
 use Cake\Console\Shell;
-use Cake\Core\Configure;
-use Cake\ORM\Entity;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
- * Task for duplicated user entries cleanup.
+ * User Group Cleanup Task
+ *
+ * Remove duplicate links from groups_users table.
  */
 class UserGroupCleanupTask extends Shell
 {
     /**
-     * {@inheritDoc}
+     * Main task method
+     *
+     * @return bool True on success, false otherwise
      */
     public function main()
     {
-        $this->out('Task: user group cleanup');
+        $this->info('Task: user group cleanup');
         $this->hr();
 
         // get groups table
@@ -35,7 +36,9 @@ class UserGroupCleanupTask extends Shell
         $query = $table->find('all');
 
         if ($query->isEmpty()) {
-            $this->abort('No groups found.');
+            $this->warn("No groups found in the system.  Nothing to do.");
+
+            return true;
         }
 
         $groups = $query->all();
@@ -49,6 +52,7 @@ class UserGroupCleanupTask extends Shell
                 ->distinct(['user_id']);
 
             if ($query->isEmpty()) {
+                $this->info("No users found in group.  Skipping.");
                 continue;
             }
 
@@ -74,9 +78,9 @@ class UserGroupCleanupTask extends Shell
                     ->execute();
             }
 
-            $this->info('Deleted ' . $count . ' records ..');
+            $this->info('Deleted ' . $count . ' duplicates.');
         }
 
-        $this->out('<success>User group cleanup task completed</success>');
+        $this->success('User group cleanup task completed.');
     }
 }
