@@ -13,115 +13,56 @@ namespace Groups\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
-use Cake\ORM\Entity;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
- * Task for assign default group to all users.
+ * Assign Task
+ *
+ * Assign all users to a default group, like Everyone.
  */
 class AssignTask extends Shell
 {
     /**
-     * {@inheritDoc}
+     * Main task method
+     *
+     * @return bool True on success, false otherwise
      */
     public function main()
     {
-        $this->out('Task: assign default group to all users');
+        $this->info('Task: assign all users to the default group');
         $this->hr();
 
-        // get groups table
+        // Read default group from configuration
+        $groupName = (string)Configure::read('Groups.defaultGroup');
+        if (empty($groupName)) {
+            $this->warn("Default group is not configured.  Nothing to do.");
+
+            return true;
+        }
+
+        // Get default group entity
         $table = TableRegistry::get('Groups.Groups');
+        $group = $table->findByName($groupName)->first();
+        if (empty($group)) {
+            $this->warn("Default group [$groupName] does not exist.  Nothing to do.");
 
-        $defaultGroup = $this->_getDefaultGroupName();
-        if ($defaultGroup) {
-            $group = $this->_getDefaultGroupEntity($table, $defaultGroup);
-            if ($group) {
-                $users = $this->_getNonDefaultGroupUsers($group);
-                if ($users) {
-                    $table->Users->link($group, $users);
-                }
-            }
+            return true;
         }
 
-        $this->out('<success>Default group assignment task completed</success>');
-    }
-
-    /**
-     * Get default group name.
-     *
-     * @return string|null
-     */
-    protected function _getDefaultGroupName()
-    {
-        $result = Configure::read('Groups.defaultGroup');
-        if (empty($result)) {
-            $this->err('Default group is not defined, all following tasks are skipped');
+        // Get all user IDs
+        $users = $table->Users->find('all', [
+            'fields' => ['id'],
+        ])->toArray();
+        if (empty($users)) {
+            $this->abort("No users found in the system.  Something is terribly wrong!");
         }
 
-        return $result;
-    }
-
-    /**
-     * Get default group and associated users.
-     *
-     * @param  \Cake\ORM\Table $table Table instance
-     * @param  string $defaultGroup Default group name
-     * @return \Cake\ORM\Entity|null
-     */
-    protected function _getDefaultGroupEntity(Table $table, $defaultGroup)
-    {
-        $result = $table
-            ->findByName($defaultGroup)
-            // @todo this needs re-thinking as it might break on large systems
-            ->contain([
-                'Users' => function ($q) {
-                    return $q
-                        ->select(['id']);
-                }
-            ])
-            ->first();
-
+        // Assign all users to the group
+        $result = $table->Users->replaceLinks($group, $users);
         if (!$result) {
-            $this->err('Default group was not found in the system, all following tasks are skipped');
+            $this->abort("Failed to add all users to group [$groupName].");
         }
 
-        return $result;
-    }
-
-    /**
-     * Get users which are not already assigned to the default group.
-     *
-     * @param  \Cake\ORM\Entity $group Group entity
-     * @return array
-     */
-    protected function _getNonDefaultGroupUsers(Entity $group)
-    {
-        $ids = [];
-        // get group users ids
-        if (!empty($group['users'])) {
-            foreach ($group['users'] as $user) {
-                $ids[] = $user->id;
-            }
-        }
-
-        // set query conditions
-        $conditions = [];
-        if (!empty($ids)) {
-            $conditions = ['id NOT IN' => $ids];
-        }
-
-        // get users not assigned to the default group
-        $result = TableRegistry::get('CakeDC/Users.Users')
-            ->find('all', [
-                'conditions' => $conditions
-            ])
-            ->all();
-
-        if ($result->isEmpty()) {
-            $this->err('All users are assigned to the default group, all following tasks are skipped');
-        }
-
-        return $result->toArray();
+        $this->success("All users are now assigned to group [$groupName].");
     }
 }

@@ -14,76 +14,59 @@ namespace Groups\Shell\Task;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
- * Task for importing default groups.
+ * Import Task
+ *
+ * Import configured system groups, like Admins and Everyone.
  */
 class ImportTask extends Shell
 {
     /**
-     * {@inheritDoc}
+     * Main task method
+     *
+     * @return bool True on success, false otherwise
      */
     public function main()
     {
-        $this->out('Task: import system group(s)');
+        $this->info('Task: import system groups');
         $this->hr();
+
+        $systemGroups = Configure::read('Groups.systemGroups');
+        if (empty($systemGroups)) {
+            $this->warn("System groups are not configured.  Nothing to do.");
+
+            return true;
+        }
 
         // get groups table
         $table = TableRegistry::get('Groups.Groups');
 
-        $systemGroups = $this->_getSystemGroups();
-        if ($systemGroups) {
-            foreach ($systemGroups as $group) {
-                $entity = $table->newEntity();
-                foreach ($group as $k => $v) {
-                    $entity->{$k} = $v;
-                }
-                $saved = $table->save($entity);
-                if ($saved) {
-                    $this->out('Group [' . $entity->name . '] imported successfully');
-                } else {
-                    $this->err('Failed to import group [' . $entity->name . ']');
-                    $errors = $this->_getImportErrors($entity);
-                    if (!empty($errors)) {
-                        $this->out(implode("\n", $errors));
-                        $this->hr();
-                    }
-                }
+        foreach ($systemGroups as $group) {
+            if (empty($group['name'])) {
+                $this->warn("Skipping group without a name.");
+                continue;
+            }
+
+            if ($table->exists(['name' => $group['name']])) {
+                $this->warn("Group [" . $group['name'] . "] already exists. Skipping.");
+                continue;
+            }
+
+            $this->info("Group [" . $group['name'] . "] does not exist. Creating.");
+            $entity = $table->newEntity();
+            $entity = $table->patchEntity($entity, $group);
+            $result = $table->save($entity);
+            if (!$result) {
+                $this->abort("Failed to create group [" . $group['name'] . "]");
+                $this->err("Errors: \n" . implode("\n", $this->getImportErrors($entity)));
+
+                return false;
             }
         }
 
-        $this->out('<success>System group(s) imporitng task completed</success>');
-    }
-
-    /**
-     * Get default group name.
-     *
-     * @return string|null
-     */
-    protected function _getSystemGroups()
-    {
-        $result = [
-            [
-                'name' => 'Admins',
-                'description' => 'Administrators of the system',
-                'deny_edit' => false,
-                'deny_delete' => true
-            ],
-            [
-                'name' => 'Everyone',
-                'description' => 'All users',
-                'deny_edit' => true,
-                'deny_delete' => true
-            ]
-        ];
-
-        if (empty($result)) {
-            $this->err('System groups are not defined, all following tasks are skipped');
-        }
-
-        return $result;
+        $this->success('System groups imported successfully');
     }
 
     /**
@@ -92,18 +75,18 @@ class ImportTask extends Shell
      * @param  \Cake\ORM\Entity $entity Entity instance
      * @return array
      */
-    protected function _getImportErrors($entity)
+    protected function getImportErrors(Entity $entity)
     {
         $result = [];
-        if (!empty($entity->errors())) {
-            foreach ($entity->errors() as $field => $error) {
-                if (is_array($error)) {
-                    $msg = implode(', ', $error);
-                } else {
-                    $msg = $error;
-                }
-                $result[] = $msg . ' [' . $field . ']';
-            }
+
+        if (empty($entity->errors())) {
+            return $result;
+        }
+
+        foreach ($entity->errors() as $field => $error) {
+            $msg = "[$field] ";
+            $msg .= is_array($error) ? implode(', ', $error) : $error;
+            $result[] = $msg;
         }
 
         return $result;
