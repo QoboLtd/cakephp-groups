@@ -20,7 +20,9 @@ use Cake\ORM\TableRegistry;
 use Exception;
 
 /**
- * Task for synchronizing ldap groups.
+ * Sync LDAP Groups Task
+ *
+ * Synchronize LDAP groups.
  */
 class SyncLdapGroupsTask extends Shell
 {
@@ -31,7 +33,7 @@ class SyncLdapGroupsTask extends Shell
      *
      * @var array
      */
-    protected $_ldapRequiredParams = [
+    protected $ldapRequiredParams = [
         'host',
         'port',
         'version',
@@ -43,7 +45,9 @@ class SyncLdapGroupsTask extends Shell
     ];
 
     /**
-     * {@inheritDoc}
+     * Main task method
+     *
+     * @return bool True on success, false otherwise
      */
     public function main()
     {
@@ -51,34 +55,40 @@ class SyncLdapGroupsTask extends Shell
         $this->hr();
 
         if (!(bool)Configure::read('Groups.remoteGroups.enabled')) {
-            $this->abort('Remote groups functionality is turned off.');
+            $this->warn('Remote groups functionality is turned off.');
+
+            return true;
         }
 
         if (!(bool)Configure::read('Groups.remoteGroups.LDAP.enabled')) {
-            $this->abort('LDAP functionality is turned off.');
+            $this->warn('LDAP functionality is turned off.');
+
+            return true;
         }
 
         $config = (array)Configure::read('Groups.remoteGroups.LDAP');
 
         // evaluate LDAP parameters
-        $diff = array_diff($this->_ldapRequiredParams, array_keys($config));
+        $diff = array_diff($this->ldapRequiredParams, array_keys($config));
         if (!empty($diff)) {
             $this->abort('Required parameters are missing: ' . implode(', ', $diff) . '.');
         }
 
         $groupsTable = TableRegistry::get('Groups.Groups');
 
-        $groups = $this->_getGroups($groupsTable);
+        $groups = $this->getGroups($groupsTable);
         if ($groups->isEmpty()) {
-            $this->abort('No mapped system groups found.');
+            $this->warn('No groups are mapped to remote LDAP groups.  Nothing to do.');
+
+            return true;
         }
 
-        $connection = $this->_ldapConnect($config);
+        $connection = $this->ldapConnect($config);
         if (!$connection) {
             $this->abort('Unable to connect to LDAP Server.');
         }
 
-        $domain = $this->_getDomain($config);
+        $domain = $this->getDomain($config);
 
         foreach ($groups as $group) {
             $filter = substr($config['filter'], 0, -1) . '(memberof=' . $group->remote_group_id . '))';
@@ -95,9 +105,9 @@ class SyncLdapGroupsTask extends Shell
                     $this->abort('Failed to query AD: ' . $e->getMessage() . '.');
                 }
 
-                $users = $this->_getUsers($data, $domain);
+                $users = $this->getUsers($data, $domain);
 
-                if (!$this->_syncGroupUsers($groupsTable, $group, $users)) {
+                if (!$this->syncGroupUsers($groupsTable, $group, $users)) {
                     $success = false;
                 }
 
@@ -120,7 +130,7 @@ class SyncLdapGroupsTask extends Shell
      * @param \Cake\ORM\Table $table Table instance
      * @return array
      */
-    protected function _getGroups(Table $table)
+    protected function getGroups(Table $table)
     {
         $query = $table->find('all')
             ->where(['remote_group_id IS NOT NULL', 'remote_group_id !=' => ''])
@@ -137,7 +147,7 @@ class SyncLdapGroupsTask extends Shell
      * @param array $config LDAP configuration
      * @return resource LDAP connection
      */
-    protected function _ldapConnect(array $config)
+    protected function ldapConnect(array $config)
     {
         try {
             $connection = @ldap_connect($config['host'], $config['port']);
@@ -164,7 +174,7 @@ class SyncLdapGroupsTask extends Shell
      * @param array $config LDAP configuration
      * @return string
      */
-    protected function _getDomain(array $config)
+    protected function getDomain(array $config)
     {
         $result = '';
         $parts = explode(',', $config['baseDn']);
@@ -194,7 +204,7 @@ class SyncLdapGroupsTask extends Shell
      * @param string $domain LDAP domain
      * @return array
      */
-    protected function _getUsers($data, $domain)
+    protected function getUsers($data, $domain)
     {
         $table = $this->getUsersTable();
 
@@ -222,7 +232,7 @@ class SyncLdapGroupsTask extends Shell
      * @param array $users Group users
      * @return bool
      */
-    protected function _syncGroupUsers(Table $table, EntityInterface $group, array $users)
+    protected function syncGroupUsers(Table $table, EntityInterface $group, array $users)
     {
         $userIds = [];
         foreach ($users as $user) {
