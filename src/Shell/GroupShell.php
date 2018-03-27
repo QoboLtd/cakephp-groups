@@ -17,7 +17,10 @@ use Cake\Console\Shell;
 class GroupShell extends Shell
 {
     /**
-     * {@inheritDoc}
+     * Contains tasks to load and instantiate
+     *
+     * @var array|bool
+     * @link https://book.cakephp.org/3.0/en/console-and-shells.html#Shell::$tasks
      */
     public $tasks = [
         'Groups.Assign',
@@ -27,14 +30,19 @@ class GroupShell extends Shell
     ];
 
     /**
-     * {@inheritDoc}
+     * Gets the option parser instance and configures it.
+     *
+     * By overriding this method you can configure the ConsoleOptionParser before returning it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     * @link https://book.cakephp.org/3.0/en/console-and-shells.html#configuring-options-and-generating-help
      */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
 
         $parser
-            ->description('Groups Shell that handle\'s related tasks.')
+            ->description("Groups management tasks.")
             ->addSubcommand(
                 'assign',
                 ['help' => 'Assign group to all users.', 'parser' => $this->Assign->getOptionParser()]
