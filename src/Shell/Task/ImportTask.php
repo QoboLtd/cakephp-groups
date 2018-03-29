@@ -59,10 +59,8 @@ class ImportTask extends Shell
             $entity = $table->patchEntity($entity, $group);
             $result = $table->save($entity);
             if (!$result) {
-                $this->abort("Failed to create group [" . $group['name'] . "]");
                 $this->err("Errors: \n" . implode("\n", $this->getImportErrors($entity)));
-
-                return false;
+                $this->abort("Failed to create group [" . $group['name'] . "]");
             }
         }
 
