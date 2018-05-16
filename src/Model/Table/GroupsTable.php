@@ -54,7 +54,7 @@ class GroupsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('groups');
+        $this->table('qobo_groups');
         $this->displayField('name');
         $this->primaryKey('id');
 
