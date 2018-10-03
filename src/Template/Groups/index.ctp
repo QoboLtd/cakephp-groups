@@ -96,7 +96,7 @@ echo $this->Html->scriptBlock(
                                     '<i class="fa fa-trash"></i>',
                                     ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'delete', $group->id],
                                     [
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $group->id),
+                                        'confirm' => __('Are you sure you want to delete {0}?', $group->name),
                                         'title' => __('Delete'),
                                         'class' => 'btn btn-default btn-sm',
                                         'escape' => false
