@@ -1,34 +1,58 @@
 {
     "name": "qobo/cakephp-groups",
     "description": "Groups plugin for CakePHP",
+    "keywords": ["cakephp", "groups"],
     "type": "cakephp-plugin",
     "license": "MIT",
-	"authors": [
-		{
-			"name": "Qobo Ltd",
-			"email": "info@qobo.biz",
-			"homepage": "https://www.qobo.biz",
-			"role": "Developer"
-		}
-	],
+    "homepage": "https://www.qobo.biz",
+    "authors": [
+        {
+            "name": "Qobo Ltd",
+            "email": "support@qobo.biz",
+            "homepage": "https://www.qobo.biz",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/QoboLtd/cakephp-groups/issues",
+        "source": "https://github.com/QoboLtd/cakephp-groups"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
     "require": {
-        "qobo/cakephp-utils": "^9.0"
+        "qobo/cakephp-utils": "^10.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "cakephp/cakephp-codesniffer": "^3.0"
+        "qobo/cakephp-composer-dev": "^v1.0"
     },
     "autoload": {
         "psr-4": {
-            "Groups\\": "src",
-            "CakeDC\\Users\\Test\\Fixture\\": "tests"
+            "Groups\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Groups\\Test\\": "tests",
-            "CakeDC\\Users\\Test\\": "./vendor/cakedc/users/tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "Groups\\Test\\": "tests/",
+            "CakeDC\\Users\\Test\\": "vendor/cakedc/users/tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
         }
-    }
+    },
+    "scripts": {
+        "test": [
+            "phpcs",
+            "phpunit --no-coverage"
+        ],
+        "test-coverage": [
+            "phpcs",
+            "phpunit"
+        ],
+        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump"
+    },
+    "scripts-descriptions": {
+        "test": "Runs phpcs and phpunit without coverage",
+        "test-coverage": "Runs phpcs and phpunit with coverage enabled"
+    },
+    "prefer-stable": true
 }
