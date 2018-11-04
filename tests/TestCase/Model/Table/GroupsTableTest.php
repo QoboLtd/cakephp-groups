@@ -57,7 +57,7 @@ class GroupsTableTest extends TestCase
     {
         $this->assertTrue($this->Groups->hasBehavior('Timestamp'));
         $this->assertTrue($this->Groups->hasBehavior('Trash'));
-        $this->assertInstanceOf(BelongsToMany::class, $this->Groups->association('Users'));
+        $this->assertInstanceOf(BelongsToMany::class, $this->Groups->getAssociation('Users'));
         $this->assertInstanceOf(GroupsTable::class, $this->Groups);
     }
 
@@ -76,7 +76,7 @@ class GroupsTableTest extends TestCase
         $data = ['name' => 'Foobar'];
 
         $entity = $this->Groups->newEntity($data);
-        $this->assertEmpty($entity->errors());
+        $this->assertEmpty($entity->getErrors());
     }
 
     public function testSave()
@@ -142,6 +142,6 @@ class GroupsTableTest extends TestCase
         $entity = $this->Groups->patchEntity($entity, ['name' => 'Lorem ipsum dolor sit amet']);
 
         $this->assertFalse($this->Groups->save($entity));
-        $this->assertNotEmpty($entity->errors());
+        $this->assertNotEmpty($entity->getErrors());
     }
 }
