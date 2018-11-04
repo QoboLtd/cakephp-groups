@@ -31,9 +31,9 @@ class GroupComponent extends Component
     /**
      * Method that retrieves specified user's groups
      * @param  string $userId user id
-     * @return array
+     * @return mixed[]
      */
-    public function getUserGroups($userId = '')
+    public function getUserGroups(string $userId = ''): array
     {
         // if not specified, get current user's id
         if (empty($userId)) {

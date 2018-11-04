@@ -113,10 +113,10 @@ class GroupsTable extends Table
      * Method that retrieves specified user's groups as list.
      *
      * @param string $userId user id
-     * @param array $options Query options
-     * @return array
+     * @param mixed[] $options Query options
+     * @return mixed[]
      */
-    public function getUserGroups($userId, array $options = [])
+    public function getUserGroups(string $userId, array $options = []): array
     {
         $query = $this->find('list', [
             'keyField' => 'id',
@@ -134,10 +134,10 @@ class GroupsTable extends Table
      * Method that retrieves specified user's groups.
      *
      * @param string $userId user id
-     * @param array $options Query options
-     * @return array
+     * @param mixed[] $options Query options
+     * @return mixed[]
      */
-    public function getUserGroupsAll($userId, array $options = [])
+    public function getUserGroupsAll(string $userId, array $options = []): array
     {
         $query = $this->find('all');
 
@@ -152,9 +152,9 @@ class GroupsTable extends Table
     /**
      * Fetch remote groups.
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getRemoteGroups()
+    public function getRemoteGroups(): array
     {
         $result = [];
 
@@ -172,9 +172,9 @@ class GroupsTable extends Table
     /**
      * Fetch LDAP groups.
      *
-     * @return array
+     * @return mixed[]
      */
-    protected function _getLdapGroups()
+    protected function _getLdapGroups(): array
     {
         $result = [];
 
@@ -184,7 +184,7 @@ class GroupsTable extends Table
         }
 
         $connection = $this->_ldapConnect($config);
-        if (!$connection) {
+        if (!is_resource($connection)) {
             return $result;
         }
 
@@ -206,7 +206,7 @@ class GroupsTable extends Table
     /**
      * Connect to LDAP server.
      *
-     * @param array $config LDAP configuration
+     * @param mixed[] $config LDAP configuration
      * @return resource LDAP connection
      */
     protected function _ldapConnect(array $config)
@@ -233,10 +233,10 @@ class GroupsTable extends Table
     /**
      * Normalizes LDAP result.
      *
-     * @param array $data LDAP result
-     * @return array
+     * @param mixed[] $data LDAP result
+     * @return mixed[]
      */
-    protected function _normalizeResult($data)
+    protected function _normalizeResult(array $data): array
     {
         $result = [];
         for ($i = 0; $i < $data['count']; $i++) {

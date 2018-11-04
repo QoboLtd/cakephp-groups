@@ -6,6 +6,10 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Shell\Task\UserGroupCleanupTask;
 
+/**
+ * @property \Groups\Model\Table\GroupsTable $Groups
+ * @property \CakeDC\Users\Model\Table\UsersTable $Users
+ */
 class UserGroupCleanupTaskTest extends TestCase
 {
     public $fixtures = [
@@ -18,8 +22,17 @@ class UserGroupCleanupTaskTest extends TestCase
     {
         parent::setUp();
 
-        $this->Groups = TableRegistry::get('Groups.Groups');
-        $this->Users = TableRegistry::get('CakeDC/Users.Users');
+        /**
+         * @var \Groups\Model\Table\GroupsTable
+         */
+        $table = TableRegistry::get('Groups.Groups');
+        $this->Groups = $table;
+
+        /**
+         * @var \CakeDC\Users\Model\Table\UsersTable
+         */
+        $table = TableRegistry::get('CakeDC/Users.Users');
+        $this->Users = $table;
 
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
             ->disableOriginalConstructor()
@@ -43,7 +56,7 @@ class UserGroupCleanupTaskTest extends TestCase
         parent::tearDown();
     }
 
-    public function testMain()
+    public function testMain(): void
     {
         $group = $this->Groups->get('00000000-0000-0000-0000-000000000001');
         $user = $this->Users->get('00000000-0000-0000-0000-000000000001');
