@@ -69,7 +69,11 @@ class GroupsController extends AppController
     {
         $group = $this->Groups->newEntity();
         if ($this->request->is('post')) {
-            $group = $this->Groups->patchEntity($group, $this->request->getData());
+            /**
+             * @var array $data
+             */
+            $data = $this->request->getData();
+            $group = $this->Groups->patchEntity($group, $data);
             if ($this->Groups->save($group)) {
                 $this->Flash->success((string)__('The group has been saved.'));
 
@@ -97,7 +101,11 @@ class GroupsController extends AppController
             'contain' => ['Users']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $group = $this->Groups->patchEntity($group, $this->request->getData());
+            /**
+             * @var array $data
+             */
+            $data = $this->request->getData();
+            $group = $this->Groups->patchEntity($group, $data);
             if ($this->Groups->save($group)) {
                 $this->Flash->success((string)__('The group has been saved.'));
 

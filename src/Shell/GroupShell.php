@@ -14,6 +14,14 @@ namespace Groups\Shell;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 
+/**
+ * Group shell
+ *
+ * @property \Groups\Shell\Task\AssignTask $Assign
+ * @property \Groups\Shell\Task\ImportTask $Import
+ * @property \Groups\Shell\Task\UserGroupCleanupTask $UserGroupCleanup
+ * @property \Groups\Shell\Task\SyncLdapGroupsTask $SyncLdapGroups
+ */
 class GroupShell extends Shell
 {
     /**
@@ -39,6 +47,9 @@ class GroupShell extends Shell
      */
     public function getOptionParser()
     {
+        /**
+         * @var \Cake\Console\ConsoleOptionParser $parser
+         */
         $parser = parent::getOptionParser();
 
         $parser

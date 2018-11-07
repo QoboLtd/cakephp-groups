@@ -40,8 +40,11 @@ class AssignTask extends Shell
             return true;
         }
 
-        // Get default group entity
+        /**
+         * @var \Groups\Model\Table\GroupsTable $table
+         */
         $table = TableRegistry::get('Groups.Groups');
+        // Get default group entity
         $group = $table->findByName($groupName)->first();
         if (empty($group)) {
             $this->warn("Default group [$groupName] does not exist.  Nothing to do.");

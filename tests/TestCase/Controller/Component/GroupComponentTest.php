@@ -9,6 +9,8 @@ use Groups\Controller\Component\GroupComponent;
 
 /**
  * Groups\Controller\Component\GroupComponent Test Case
+ *
+ * @property \Groups\Controller\Component\GroupComponent $GroupComponent
  */
 class GroupComponentTest extends TestCase
 {

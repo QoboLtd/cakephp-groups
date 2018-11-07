@@ -77,14 +77,14 @@ class SyncLdapGroupsTask extends Shell
         $groupsTable = TableRegistry::get('Groups.Groups');
 
         $groups = $this->getGroups($groupsTable);
-        if ($groups->isEmpty()) {
+        if (empty($groups)) {
             $this->warn('No groups are mapped to remote LDAP groups.  Nothing to do.');
 
             return true;
         }
 
         $connection = $this->ldapConnect($config);
-        if (!$connection) {
+        if (!is_resource($connection)) {
             $this->abort('Unable to connect to LDAP Server.');
         }
 
@@ -96,13 +96,18 @@ class SyncLdapGroupsTask extends Shell
             $cookie = '';
             $success = true;
             do {
-                try {
-                    ldap_control_paged_result($connection, 20, true, $cookie);
+                $result = ldap_control_paged_result($connection, 20, true, $cookie);
+                if ($result === false) {
+                    $this->abort('Failed to set LDAP paged result');
+                }
 
-                    $search = ldap_search($connection, $config['baseDn'], $filter, ['userprincipalname']);
-                    $data = ldap_get_entries($connection, $search);
-                } catch (Exception $e) {
-                    $this->abort('Failed to query AD: ' . $e->getMessage() . '.');
+                $search = ldap_search($connection, $config['baseDn'], $filter, ['userprincipalname']);
+                if (!is_resource($search)) {
+                    $this->abort('Failed to search LDAP');
+                }
+                $data = ldap_get_entries($connection, $search);
+                if (!is_array($data)) {
+                    $this->abort('Failed to get search results from LDAP');
                 }
 
                 $users = $this->getUsers($data, $domain);
@@ -128,41 +133,47 @@ class SyncLdapGroupsTask extends Shell
      * Fetch system groups which are mapped to LDAP group.
      *
      * @param \Cake\ORM\Table $table Table instance
-     * @return array
+     * @return mixed[]
      */
-    protected function getGroups(Table $table)
+    protected function getGroups(Table $table): array
     {
+        /**
+         * @var \Cake\ORM\Query $query
+         */
         $query = $table->find('all')
             ->where(['remote_group_id IS NOT NULL', 'remote_group_id !=' => ''])
             ->contain(['Users' => function ($q) {
                 return $q->select(['Users.username']);
             }]);
+        /**
+         * @var array $result
+         */
+        $result = $query->all();
 
-        return $query->all();
+        return $result;
     }
 
     /**
      * Connect to LDAP server.
      *
-     * @param array $config LDAP configuration
+     * @param mixed[] $config LDAP configuration
      * @return resource LDAP connection
      */
     protected function ldapConnect(array $config)
     {
-        try {
-            $connection = @ldap_connect($config['host'], $config['port']);
+        $connection = @ldap_connect($config['host'], $config['port']);
+        if (!is_resource($connection)) {
+            $this->abort("Unable to connecto LDAP at [" . $config['host'] . ":" . $config['port'] . "]");
+        }
 
-            // set LDAP options
-            ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
-            ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
-            ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
+        // set LDAP options
+        ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
+        ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
 
-            $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
-            if (!$bind) {
-                $this->abort('Cannot bind with user: ' . $config['username'] . '.');
-            }
-        } catch (Exception $e) {
-            $this->abort('Unable to connect to specified LDAP Server: ' . $e->getMessage() . '.');
+        $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
+        if ($bind === false) {
+            $this->abort('Cannot bind with user: ' . $config['username'] . '.');
         }
 
         return $connection;
@@ -171,10 +182,10 @@ class SyncLdapGroupsTask extends Shell
     /**
      * Get LDAP domain.
      *
-     * @param array $config LDAP configuration
+     * @param mixed[] $config LDAP configuration
      * @return string
      */
-    protected function getDomain(array $config)
+    protected function getDomain(array $config): string
     {
         $result = '';
         $parts = explode(',', $config['baseDn']);
@@ -200,12 +211,15 @@ class SyncLdapGroupsTask extends Shell
     /**
      * Fetch system users which are members of LDAP group.
      *
-     * @param array $data LDAP result
+     * @param mixed[] $data LDAP result
      * @param string $domain LDAP domain
-     * @return array
+     * @return mixed[]
      */
-    protected function getUsers($data, $domain)
+    protected function getUsers(array $data, string $domain): array
     {
+        /**
+         * @var \CakeDC\Users\Model\Table\UsersTable $table
+         */
         $table = $this->getUsersTable();
 
         $result = [];
@@ -229,10 +243,10 @@ class SyncLdapGroupsTask extends Shell
      *
      * @param \Cake\ORM\Table $table Table instance
      * @param \Cake\Datasource\EntityInterface $group Group entity
-     * @param array $users Group users
+     * @param mixed[] $users Group users
      * @return bool
      */
-    protected function syncGroupUsers(Table $table, EntityInterface $group, array $users)
+    protected function syncGroupUsers(Table $table, EntityInterface $group, array $users): bool
     {
         $userIds = [];
         foreach ($users as $user) {
@@ -252,7 +266,8 @@ class SyncLdapGroupsTask extends Shell
         ];
 
         $group = $table->patchEntity($group, $data);
+        $result = empty($table) ? false : true;
 
-        return $table->save($group);
+        return $result;
     }
 }

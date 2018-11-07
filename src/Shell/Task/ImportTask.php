@@ -13,7 +13,7 @@ namespace Groups\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
-use Cake\ORM\Entity;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -70,18 +70,23 @@ class ImportTask extends Shell
     /**
      * Get import errors from entity object.
      *
-     * @param  \Cake\ORM\Entity $entity Entity instance
-     * @return array
+     * @param  \Cake\Datasource\EntityInterface $entity Entity instance
+     * @return string[]
      */
-    protected function getImportErrors(Entity $entity)
+    protected function getImportErrors(EntityInterface $entity): array
     {
         $result = [];
 
-        if (empty($entity->errors())) {
+        /**
+         * @var array $errors
+         */
+        $errors = $entity->errors();
+
+        if (empty($errors)) {
             return $result;
         }
 
-        foreach ($entity->errors() as $field => $error) {
+        foreach ($errors as $field => $error) {
             $msg = "[$field] ";
             $msg .= is_array($error) ? implode(', ', $error) : $error;
             $result[] = $msg;

@@ -188,13 +188,14 @@ class GroupsTable extends Table
             return $result;
         }
 
-        try {
-            $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
+        $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
+        if (!is_resource($search)) {
+            Log::critical('Failed to search LDAP');
 
-            $result = ldap_get_entries($connection, $search);
-        } catch (Exception $e) {
-            Log::critical('Failed to query AD: ' . $e->getMessage());
+            return $result;
         }
+
+        $result = ldap_get_entries($connection, $search);
 
         if (empty($result)) {
             return $result;
@@ -207,24 +208,29 @@ class GroupsTable extends Table
      * Connect to LDAP server.
      *
      * @param mixed[] $config LDAP configuration
-     * @return resource LDAP connection
+     * @return resource|false LDAP connection
      */
     protected function _ldapConnect(array $config)
     {
-        try {
-            $connection = @ldap_connect($config['host'], $config['port']);
+        $result = false;
 
-            // set LDAP options
-            ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
-            ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
-            ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
+        $connection = @ldap_connect($config['host'], $config['port']);
+        if (!is_resource($connection)) {
+            Log::critical("Unable to connecto LDAP at [" . $config['host'] . ":" . $config['port'] . "]");
 
-            $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
-            if (!$bind) {
-                Log::critical('Cannot bind with user: ' . $config['username']);
-            }
-        } catch (Exception $e) {
-            Log::critical('Unable to connect to specified LDAP Server: ' . $e->getMessage());
+            return $result;
+        }
+
+        // set LDAP options
+        ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
+        ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
+
+        $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
+        if ($bind === false) {
+            Log::critical('Cannot bind with user: ' . $config['username']);
+
+            return $result;
         }
 
         return $connection;

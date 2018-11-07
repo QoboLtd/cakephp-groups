@@ -14,6 +14,11 @@ namespace Groups\Controller\Component;
 use Cake\Controller\Component;
 use Cake\ORM\TableRegistry;
 
+/**
+ * Groups Component
+ *
+ * @property \Cake\Controller\Component\AuthComponent $Auth
+ */
 class GroupComponent extends Component
 {
     public $components = ['Auth'];
