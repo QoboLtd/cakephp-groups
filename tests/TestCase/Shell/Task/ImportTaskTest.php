@@ -5,6 +5,9 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Shell\Task\ImportTask;
 
+/**
+ * @property \Groups\Model\Table\GroupsTable $Groups
+ */
 class ImportTaskTest extends TestCase
 {
     public $fixtures = [
@@ -15,7 +18,11 @@ class ImportTaskTest extends TestCase
     {
         parent::setUp();
 
-        $this->Groups = TableRegistry::get('Groups.Groups');
+        /**
+         * @var \Groups\Model\Table\GroupsTable $table
+         */
+        $table = TableRegistry::get('Groups.Groups');
+        $this->Groups = $table;
 
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
             ->disableOriginalConstructor()
@@ -36,13 +43,21 @@ class ImportTaskTest extends TestCase
         parent::tearDown();
     }
 
-    public function testMain()
+    public function testMain(): void
     {
         $group = $this->Groups->find()->where(['name' => 'Admins'])->first();
-        $this->Groups->delete($group);
+        $this->assertFalse(empty($group), "No Admins group found");
+        $this->assertTrue(is_object($group), "Admins group is not an object");
+        if (!empty($group) && is_object($group)) {
+            $this->Groups->delete($group);
+        }
 
         $group = $this->Groups->find()->where(['name' => 'Everyone'])->first();
-        $this->Groups->delete($group);
+        $this->assertFalse(empty($group), "No Everyone group found");
+        $this->assertTrue(is_object($group), "Everyone group is not an object");
+        if (!empty($group) && is_object($group)) {
+            $this->Groups->delete($group);
+        }
 
         $this->Task->main();
 

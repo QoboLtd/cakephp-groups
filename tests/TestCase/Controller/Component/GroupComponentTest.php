@@ -9,6 +9,8 @@ use Groups\Controller\Component\GroupComponent;
 
 /**
  * Groups\Controller\Component\GroupComponent Test Case
+ *
+ * @property \Groups\Controller\Component\GroupComponent $GroupComponent
  */
 class GroupComponentTest extends TestCase
 {
@@ -40,7 +42,7 @@ class GroupComponentTest extends TestCase
         parent::tearDown();
     }
 
-    public function testGetUserGroups()
+    public function testGetUserGroups(): void
     {
         $result = $this->GroupComponent->getUserGroups('00000000-0000-0000-0000-000000000001');
 
@@ -48,7 +50,7 @@ class GroupComponentTest extends TestCase
         $this->assertEquals(1, count($result));
     }
 
-    public function testGetUserGroupsWithoutUserId()
+    public function testGetUserGroupsWithoutUserId(): void
     {
         $this->GroupComponent->Auth->setUser(['id' => '00000000-0000-0000-0000-000000000001']);
 

@@ -24,7 +24,7 @@ class GroupsController extends AppController
     /**
      * Index method
      *
-     * @return void
+     * @return \Cake\Http\Response|void|null
      */
     public function index()
     {
@@ -45,10 +45,10 @@ class GroupsController extends AppController
      * View method
      *
      * @param string|null $id Group id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @return \Cake\Http\Response|void|null
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(string $id = null)
     {
         $group = $this->Groups->get($id, [
             'contain' => ['Users' => function ($q) {
@@ -63,19 +63,23 @@ class GroupsController extends AppController
     /**
      * Add method
      *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
+     * @return \Cake\Http\Response|void|null Redirects on successful add, renders view otherwise.
+     * */
     public function add()
     {
         $group = $this->Groups->newEntity();
         if ($this->request->is('post')) {
-            $group = $this->Groups->patchEntity($group, $this->request->data);
+            /**
+             * @var array $data
+             */
+            $data = $this->request->getData();
+            $group = $this->Groups->patchEntity($group, $data);
             if ($this->Groups->save($group)) {
-                $this->Flash->success(__('The group has been saved.'));
+                $this->Flash->success((string)__('The group has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The group could not be saved. Please, try again.'));
+                $this->Flash->error((string)__('The group could not be saved. Please, try again.'));
             }
         }
         $users = $this->Groups->Users->find('list', ['limit' => 500]);
@@ -88,22 +92,26 @@ class GroupsController extends AppController
      * Edit method
      *
      * @param string|null $id Group id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @return \Cake\Http\Response|void|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(string $id = null)
     {
         $group = $this->Groups->get($id, [
             'contain' => ['Users']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $group = $this->Groups->patchEntity($group, $this->request->data);
+            /**
+             * @var array $data
+             */
+            $data = $this->request->getData();
+            $group = $this->Groups->patchEntity($group, $data);
             if ($this->Groups->save($group)) {
-                $this->Flash->success(__('The group has been saved.'));
+                $this->Flash->success((string)__('The group has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The group could not be saved. Please, try again.'));
+                $this->Flash->error((string)__('The group could not be saved. Please, try again.'));
             }
         }
         $users = $this->Groups->Users->find('list', ['limit' => 500]);
@@ -116,17 +124,17 @@ class GroupsController extends AppController
      * Delete method
      *
      * @param string|null $id Group id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @return \Cake\Http\Response|void|null Redirects to index.
+     * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $group = $this->Groups->get($id);
         if ($this->Groups->delete($group)) {
-            $this->Flash->success(__('The group has been deleted.'));
+            $this->Flash->success((string)__('The group has been deleted.'));
         } else {
-            $this->Flash->error(__('The group could not be deleted. Please, try again.'));
+            $this->Flash->error((string)__('The group could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

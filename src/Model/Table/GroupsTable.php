@@ -54,9 +54,9 @@ class GroupsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('qobo_groups');
-        $this->displayField('name');
-        $this->primaryKey('id');
+        $this->setTable('qobo_groups');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('Muffin/Trash.Trash');
@@ -113,10 +113,10 @@ class GroupsTable extends Table
      * Method that retrieves specified user's groups as list.
      *
      * @param string $userId user id
-     * @param array $options Query options
-     * @return array
+     * @param mixed[] $options Query options
+     * @return mixed[]
      */
-    public function getUserGroups($userId, array $options = [])
+    public function getUserGroups(string $userId, array $options = []): array
     {
         $query = $this->find('list', [
             'keyField' => 'id',
@@ -134,10 +134,10 @@ class GroupsTable extends Table
      * Method that retrieves specified user's groups.
      *
      * @param string $userId user id
-     * @param array $options Query options
-     * @return array
+     * @param mixed[] $options Query options
+     * @return mixed[]
      */
-    public function getUserGroupsAll($userId, array $options = [])
+    public function getUserGroupsAll(string $userId, array $options = []): array
     {
         $query = $this->find('all');
 
@@ -152,9 +152,9 @@ class GroupsTable extends Table
     /**
      * Fetch remote groups.
      *
-     * @return array
+     * @return mixed[]
      */
-    public function getRemoteGroups()
+    public function getRemoteGroups(): array
     {
         $result = [];
 
@@ -172,9 +172,9 @@ class GroupsTable extends Table
     /**
      * Fetch LDAP groups.
      *
-     * @return array
+     * @return mixed[]
      */
-    protected function _getLdapGroups()
+    protected function _getLdapGroups(): array
     {
         $result = [];
 
@@ -184,17 +184,18 @@ class GroupsTable extends Table
         }
 
         $connection = $this->_ldapConnect($config);
-        if (!$connection) {
+        if (!is_resource($connection)) {
             return $result;
         }
 
-        try {
-            $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
+        $search = ldap_search($connection, $config['baseDn'], $config['groupsFilter'], ['cn']);
+        if (!is_resource($search)) {
+            Log::critical('Failed to search LDAP');
 
-            $result = ldap_get_entries($connection, $search);
-        } catch (Exception $e) {
-            Log::critical('Failed to query AD: ' . $e->getMessage());
+            return $result;
         }
+
+        $result = ldap_get_entries($connection, $search);
 
         if (empty($result)) {
             return $result;
@@ -206,25 +207,30 @@ class GroupsTable extends Table
     /**
      * Connect to LDAP server.
      *
-     * @param array $config LDAP configuration
-     * @return resource LDAP connection
+     * @param mixed[] $config LDAP configuration
+     * @return resource|false LDAP connection
      */
     protected function _ldapConnect(array $config)
     {
-        try {
-            $connection = @ldap_connect($config['host'], $config['port']);
+        $result = false;
 
-            // set LDAP options
-            ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
-            ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
-            ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
+        $connection = @ldap_connect($config['host'], $config['port']);
+        if (!is_resource($connection)) {
+            Log::critical("Unable to connecto LDAP at [" . $config['host'] . ":" . $config['port'] . "]");
 
-            $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
-            if (!$bind) {
-                Log::critical('Cannot bind with user: ' . $config['username']);
-            }
-        } catch (Exception $e) {
-            Log::critical('Unable to connect to specified LDAP Server: ' . $e->getMessage());
+            return $result;
+        }
+
+        // set LDAP options
+        ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, (int)$config['version']);
+        ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
+
+        $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
+        if ($bind === false) {
+            Log::critical('Cannot bind with user: ' . $config['username']);
+
+            return $result;
         }
 
         return $connection;
@@ -233,10 +239,10 @@ class GroupsTable extends Table
     /**
      * Normalizes LDAP result.
      *
-     * @param array $data LDAP result
-     * @return array
+     * @param mixed[] $data LDAP result
+     * @return mixed[]
      */
-    protected function _normalizeResult($data)
+    protected function _normalizeResult(array $data): array
     {
         $result = [];
         for ($i = 0; $i < $data['count']; $i++) {

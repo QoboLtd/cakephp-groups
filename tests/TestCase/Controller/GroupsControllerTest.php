@@ -11,6 +11,8 @@ use Groups\Model\Entity\Group;
 
 /**
  * Groups\Controller\GroupsController Test Case
+ *
+ * @property \Groups\Model\Table\GroupsTable $Groups
  */
 class GroupsControllerTest extends IntegrationTestCase
 {
@@ -24,7 +26,11 @@ class GroupsControllerTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        $this->Groups = TableRegistry::get('Groups.Groups');
+        /**
+         * @var \Groups\Model\Table\GroupsTable $table
+         */
+        $table = TableRegistry::get('Groups.Groups');
+        $this->Groups = $table;
 
         // Run all tests as authenticated user
         $this->session(['Auth.User.id' => '00000000-0000-0000-0000-000000000001']);
@@ -42,7 +48,7 @@ class GroupsControllerTest extends IntegrationTestCase
         parent::tearDown();
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->get('/groups/groups');
 
@@ -53,7 +59,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertEquals(3, $groups->count());
     }
 
-    public function testView()
+    public function testView(): void
     {
         $id = '00000000-0000-0000-0000-000000000001';
         $this->get('/groups/groups/view/' . $id);
@@ -64,7 +70,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertInstanceOf(Group::class, $group);
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $expected = 1 + $this->Groups->find('all')->count();
 
@@ -82,7 +88,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertEquals($expected, $this->Groups->find('all')->count());
     }
 
-    public function testAddExistingName()
+    public function testAddExistingName(): void
     {
         $data = ['name' => 'Lorem ipsum dolor sit amet'];
 
@@ -91,7 +97,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertSession('The group could not be saved. Please, try again.', 'Flash.flash.0.message');
     }
 
-    public function testAddGet()
+    public function testAddGet(): void
     {
         $this->get('/groups/groups/add');
 
@@ -108,7 +114,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertInternalType('array', $remoteGroups);
     }
 
-    public function testEdit()
+    public function testEdit(): void
     {
         $id = '00000000-0000-0000-0000-000000000001';
 
@@ -130,7 +136,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertNotEquals($entity->get('name'), $result->get('name'));
     }
 
-    public function testEditGet()
+    public function testEditGet(): void
     {
         $id = '00000000-0000-0000-0000-000000000001';
 
@@ -149,7 +155,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $this->assertInternalType('array', $remoteGroups);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $expected = $this->Groups->find('all')->count() - 1;
 

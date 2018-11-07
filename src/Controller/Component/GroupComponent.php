@@ -14,6 +14,11 @@ namespace Groups\Controller\Component;
 use Cake\Controller\Component;
 use Cake\ORM\TableRegistry;
 
+/**
+ * Groups Component
+ *
+ * @property \Cake\Controller\Component\AuthComponent $Auth
+ */
 class GroupComponent extends Component
 {
     public $components = ['Auth'];
@@ -31,9 +36,9 @@ class GroupComponent extends Component
     /**
      * Method that retrieves specified user's groups
      * @param  string $userId user id
-     * @return array
+     * @return mixed[]
      */
-    public function getUserGroups($userId = '')
+    public function getUserGroups(string $userId = ''): array
     {
         // if not specified, get current user's id
         if (empty($userId)) {

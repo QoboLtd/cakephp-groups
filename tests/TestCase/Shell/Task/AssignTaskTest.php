@@ -6,6 +6,10 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Shell\Task\AssignTask;
 
+/**
+ * @property \Groups\Model\Table\GroupsTable $Groups
+ * @property \CakeDC\Users\Model\Table\UsersTable $Users
+ */
 class AssignTaskTest extends TestCase
 {
     public $fixtures = [
@@ -18,8 +22,17 @@ class AssignTaskTest extends TestCase
     {
         parent::setUp();
 
-        $this->Groups = TableRegistry::get('Groups.Groups');
-        $this->Users = TableRegistry::get('CakeDC/Users.Users');
+        /**
+         * @var \Groups\Model\Table\GroupsTable $table
+         */
+        $table = TableRegistry::get('Groups.Groups');
+        $this->Groups = $table;
+
+        /**
+         * @var \CakeDC\Users\Model\Table\UsersTable $table
+         */
+        $table = TableRegistry::get('CakeDC/Users.Users');
+        $this->Users = $table;
 
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
             ->disableOriginalConstructor()
@@ -43,7 +56,7 @@ class AssignTaskTest extends TestCase
         parent::tearDown();
     }
 
-    public function testMain()
+    public function testMain(): void
     {
         $data = ['name' => Configure::read('Groups.defaultGroup')];
 
@@ -58,7 +71,14 @@ class AssignTaskTest extends TestCase
 
         $this->Task->main();
 
-        $entity = $this->Groups->find()->where($data)->contain('Users')->first();
-        $this->assertEquals($expected, count($entity->get('users')));
+        $groups = $this->Groups->find()->where($data)->contain('Users');
+        $this->assertTrue(is_object($groups), "Groups is not an object");
+        if (is_object($groups)) {
+            $entity = $groups->first();
+            $this->assertTrue(is_object($entity), "First user is not an object");
+            if (is_object($entity)) {
+                $this->assertEquals($expected, count($entity->get('users')));
+            }
+        }
     }
 }
