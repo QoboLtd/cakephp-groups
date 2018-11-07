@@ -45,10 +45,10 @@ echo $this->Html->script(
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $this->Form->input('name'); ?>
+                            <?= $this->Form->control('name'); ?>
                         </div>
                         <div class="col-md-6">
-                            <?= $this->Form->input('description'); ?>
+                            <?= $this->Form->control('description'); ?>
                         </div>
                     </div>
                     <div class="row">
