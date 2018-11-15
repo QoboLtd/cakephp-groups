@@ -44,9 +44,16 @@ class AssignTask extends Shell
          * @var \Groups\Model\Table\GroupsTable $table
          */
         $table = TableRegistry::get('Groups.Groups');
-        // Get default group entity
-        $group = $table->findByName($groupName)->first();
-        if (empty($group)) {
+        /**
+         * Get default group entity.
+         *
+         * @var \Cake\Datasource\EntityInterface|null
+         */
+        $group = $table->find()
+            ->where(['name' => $groupName])
+            ->enableHydration(true)
+            ->first();
+        if (null === $group) {
             $this->warn("Default group [$groupName] does not exist.  Nothing to do.");
 
             return true;

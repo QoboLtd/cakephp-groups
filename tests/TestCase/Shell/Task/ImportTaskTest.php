@@ -1,5 +1,5 @@
 <?php
-namespace Groups\Test\TestCase\Model\Table;
+namespace Groups\Test\TestCase\Shell\Task;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
@@ -14,6 +14,11 @@ class ImportTaskTest extends TestCase
         'plugin.groups.groups',
     ];
 
+    /**
+     * @var \Groups\Shell\Task\ImportTask
+     */
+    private $Task;
+
     public function setUp()
     {
         parent::setUp();
@@ -24,20 +29,15 @@ class ImportTaskTest extends TestCase
         $table = TableRegistry::get('Groups.Groups');
         $this->Groups = $table;
 
-        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var \Cake\Console\ConsoleIo */
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->Task = $this->getMockBuilder('Groups\Shell\Task\ImportTask')
-            ->setMethods(['in', 'out', 'err', '_stop'])
-            ->setConstructorArgs([$this->io])
-            ->getMock();
+        $this->Task = new ImportTask($io);
     }
 
     public function tearDown()
     {
         unset($this->Groups);
-        unset($this->io);
         unset($this->Task);
 
         parent::tearDown();

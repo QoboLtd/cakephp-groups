@@ -27,6 +27,7 @@ class GroupComponentTest extends TestCase
         // Setup our component and fake test controller
         $request = new ServerRequest();
         $response = new Response();
+        /** @var \Cake\Controller\Controller */
         $controller = $this->getMockBuilder('Cake\Controller\Controller')
             ->setConstructorArgs([$request, $response])
             ->setMethods(null)

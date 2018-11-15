@@ -1,5 +1,5 @@
 <?php
-namespace Groups\Test\TestCase\Model\Table;
+namespace Groups\Test\TestCase\Shell\Task;
 
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -18,6 +18,11 @@ class AssignTaskTest extends TestCase
         'plugin.CakeDC/Users.users',
     ];
 
+    /**
+     * @var \Groups\Shell\Task\AssignTask
+     */
+    private $Task;
+
     public function setUp()
     {
         parent::setUp();
@@ -34,14 +39,10 @@ class AssignTaskTest extends TestCase
         $table = TableRegistry::get('CakeDC/Users.Users');
         $this->Users = $table;
 
-        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var \Cake\Console\ConsoleIo */
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->Task = $this->getMockBuilder('Groups\Shell\Task\AssignTask')
-            ->setMethods(['in', 'out', 'err', '_stop'])
-            ->setConstructorArgs([$this->io])
-            ->getMock();
+        $this->Task = new AssignTask($io);
 
         Configure::load('Groups.groups');
     }
@@ -50,7 +51,6 @@ class AssignTaskTest extends TestCase
     {
         unset($this->Groups);
         unset($this->Users);
-        unset($this->io);
         unset($this->Task);
 
         parent::tearDown();
@@ -60,25 +60,20 @@ class AssignTaskTest extends TestCase
     {
         $data = ['name' => Configure::read('Groups.defaultGroup')];
 
-        $entity = $this->Groups->newEntity();
-        $entity = $this->Groups->patchEntity($entity, $data);
-
-        if (!$this->Groups->save($entity)) {
-            return;
-        }
-
-        $expected = $this->Users->find('all')->count();
+        $expected = $this->Users->find()->count();
 
         $this->Task->main();
 
-        $groups = $this->Groups->find()->where($data)->contain('Users');
-        $this->assertTrue(is_object($groups), "Groups is not an object");
-        if (is_object($groups)) {
-            $entity = $groups->first();
-            $this->assertTrue(is_object($entity), "First user is not an object");
-            if (is_object($entity)) {
-                $this->assertEquals($expected, count($entity->get('users')));
-            }
-        }
+        /** @var \Cake\ORM\Query */
+        $query = $this->Groups->find()
+            ->where($data)
+            ->contain('Users');
+
+        $query->enableHydration(true);
+
+        /** @var \Cake\Datasource\EntityInterface */
+        $entity = $query->first();
+
+        $this->assertEquals($expected, count($entity->get('users')));
     }
 }

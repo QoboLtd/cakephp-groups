@@ -1,5 +1,5 @@
 <?php
-namespace Groups\Test\TestCase\Model\Table;
+namespace Groups\Test\TestCase\Shell\Task;
 
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -18,6 +18,11 @@ class UserGroupCleanupTaskTest extends TestCase
         'plugin.CakeDC/Users.users',
     ];
 
+    /**
+     * @var \Groups\Shell\Task\UserGroupCleanupTask
+     */
+    private $Task;
+
     public function setUp()
     {
         parent::setUp();
@@ -34,14 +39,10 @@ class UserGroupCleanupTaskTest extends TestCase
         $table = TableRegistry::get('CakeDC/Users.Users');
         $this->Users = $table;
 
-        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var \Cake\Console\ConsoleIo */
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->Task = $this->getMockBuilder('Groups\Shell\Task\UserGroupCleanupTask')
-            ->setMethods(['in', 'out', 'err', '_stop'])
-            ->setConstructorArgs([$this->io])
-            ->getMock();
+        $this->Task = new UserGroupCleanupTask($io);
 
         Configure::load('Groups.groups');
     }
@@ -50,7 +51,6 @@ class UserGroupCleanupTaskTest extends TestCase
     {
         unset($this->Groups);
         unset($this->Users);
-        unset($this->io);
         unset($this->Task);
 
         parent::tearDown();
