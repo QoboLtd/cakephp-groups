@@ -44,11 +44,11 @@ class GroupsController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Group id.
+     * @param string $id Group id.
      * @return \Cake\Http\Response|void|null
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function view(string $id = null)
+    public function view(string $id)
     {
         $group = $this->Groups->get($id, [
             'contain' => ['Users' => function ($q) {
@@ -91,11 +91,11 @@ class GroupsController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Group id.
+     * @param string $id Group id.
      * @return \Cake\Http\Response|void|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function edit(string $id = null)
+    public function edit(string $id)
     {
         $group = $this->Groups->get($id, [
             'contain' => ['Users']
@@ -123,11 +123,11 @@ class GroupsController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Group id.
+     * @param string $id Group id.
      * @return \Cake\Http\Response|void|null Redirects to index.
      * @throws \Cake\Http\Exception\NotFoundException When record not found.
      */
-    public function delete(string $id = null)
+    public function delete(string $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         $group = $this->Groups->get($id);
