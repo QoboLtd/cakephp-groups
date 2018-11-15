@@ -161,6 +161,7 @@ class SyncLdapGroupsTask extends Shell
      */
     protected function ldapConnect(array $config)
     {
+        // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
         $connection = @ldap_connect($config['host'], $config['port']);
         if (!is_resource($connection)) {
             $this->abort("Unable to connecto LDAP at [" . $config['host'] . ":" . $config['port'] . "]");
@@ -171,6 +172,7 @@ class SyncLdapGroupsTask extends Shell
         ldap_set_option($connection, LDAP_OPT_REFERRALS, 0);
         ldap_set_option($connection, LDAP_OPT_NETWORK_TIMEOUT, 5);
 
+        // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
         $bind = @ldap_bind($connection, $config['domain'] . '\\' . $config['username'], $config['password']);
         if ($bind === false) {
             $this->abort('Cannot bind with user: ' . $config['username'] . '.');
