@@ -1,5 +1,5 @@
 <?php
-namespace Groups\Test\TestCase\Model\Table;
+namespace Groups\Test\TestCase\Shell\Task;
 
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
