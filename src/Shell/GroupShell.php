@@ -47,13 +47,11 @@ class GroupShell extends Shell
      */
     public function getOptionParser()
     {
-        /**
-         * @var \Cake\Console\ConsoleOptionParser $parser
-         */
+        /** @var \Cake\Console\ConsoleOptionParser */
         $parser = parent::getOptionParser();
 
         $parser
-            ->description("Groups management tasks.")
+            ->setDescription("Groups management tasks.")
             ->addSubcommand(
                 'assign',
                 ['help' => 'Assign group to all users.', 'parser' => $this->Assign->getOptionParser()]

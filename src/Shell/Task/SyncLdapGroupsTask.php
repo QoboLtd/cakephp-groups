@@ -227,7 +227,7 @@ class SyncLdapGroupsTask extends Shell
             $username = $data[$i]['userprincipalname'][0];
             $username = str_replace('@' . $domain, '', $username);
 
-            $query = $table->findByUsername($username);
+            $query = $table->find()->where(['username' => $username]);
             if ($query->isEmpty()) {
                 continue;
             }
