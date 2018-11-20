@@ -27,7 +27,7 @@ EventManager::instance()->on(
     function (Event $event, $entity) {
         $usersTable = Configure::read('Auth.authenticate.all.userModel');
         $usersTable = array_merge(['CakeDC/Users.Users'], [$usersTable]);
-        if (!in_array($event->subject()->registryAlias(), $usersTable)) {
+        if (!in_array($event->getSubject()->getRegistryAlias(), $usersTable)) {
             return;
         }
 
