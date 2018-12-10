@@ -21,6 +21,12 @@
         "sort-packages": true,
         "optimize-autoloader": true
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/QoboLtd/cakephp-file-storage.git"
+        }
+    ],
     "require": {
         "qobo/cakephp-utils": "^10.0"
     },
