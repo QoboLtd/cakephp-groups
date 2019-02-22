@@ -15,5 +15,6 @@ parameters:
         # Issue link: https://github.com/phpstan/phpstan/issues/1585
         - '#Function ldap_control_paged_result_response invoked with 3 parameters, 4 required.#'
 includes:
+    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - vendor/timeweb/phpstan-enum/extension.neon

@@ -13,6 +13,7 @@ namespace Groups\Shell;
 
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
+use Webmozart\Assert\Assert;
 
 /**
  * Group shell
@@ -47,8 +48,8 @@ class GroupShell extends Shell
      */
     public function getOptionParser()
     {
-        /** @var \Cake\Console\ConsoleOptionParser */
         $parser = parent::getOptionParser();
+        Assert::isInstanceOf($parser, ConsoleOptionParser::class);
 
         $parser
             ->setDescription("Groups management tasks.")
