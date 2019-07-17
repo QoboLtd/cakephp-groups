@@ -78,7 +78,7 @@ class GroupsController extends AppController
                 $this->Flash->error(__('The group could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Groups->Users->find('list', ['limit' => 500]);
+        $users = $this->Groups->Users->find('list');
         $remoteGroups = $this->Groups->getRemoteGroups();
         $this->set(compact('group', 'users', 'remoteGroups'));
         $this->set('_serialize', ['group']);
@@ -106,7 +106,7 @@ class GroupsController extends AppController
                 $this->Flash->error(__('The group could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Groups->Users->find('list', ['limit' => 500]);
+        $users = $this->Groups->Users->find('list');
         $remoteGroups = $this->Groups->getRemoteGroups();
         $this->set(compact('group', 'users', 'remoteGroups'));
         $this->set('_serialize', ['group']);
