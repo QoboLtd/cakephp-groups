@@ -4,6 +4,7 @@ namespace Groups\Test\TestCase\Shell\Task;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Shell\Task\ImportTask;
+use Webmozart\Assert\Assert;
 
 /**
  * @property \Groups\Model\Table\GroupsTable $Groups
@@ -43,28 +44,52 @@ class ImportTaskTest extends TestCase
         parent::tearDown();
     }
 
-    public function testMain(): void
+    /**
+     * @dataProvider groupsProvider
+     * @param mixed[] $data Group data
+     */
+    public function testMain(array $data): void
     {
-        $group = $this->Groups->find()->where(['name' => 'Admins'])->first();
-        $this->assertFalse(empty($group), "No Admins group found");
-        $this->assertTrue(is_object($group), "Admins group is not an object");
-        if (!empty($group) && is_object($group)) {
-            $this->Groups->delete($group);
-        }
-
-        $group = $this->Groups->find()->where(['name' => 'Everyone'])->first();
-        $this->assertFalse(empty($group), "No Everyone group found");
-        $this->assertTrue(is_object($group), "Everyone group is not an object");
-        if (!empty($group) && is_object($group)) {
-            $this->Groups->delete($group);
-        }
+        $this->Groups->deleteAll([]);
 
         $this->Task->main();
 
-        $query = $this->Groups->find()->where(['name' => 'Admins']);
-        $this->assertFalse($query->isEmpty());
+        $query = $this->Groups->find()->where(['name' => $data['name']]);
+        $this->assertSame(1, $query->count());
 
-        $query = $this->Groups->find()->where(['name' => 'Everyone']);
-        $this->assertFalse($query->isEmpty());
+        $entity = $query->firstOrFail();
+        Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+        $group = $entity->toArray();
+
+        $this->assertSame([], array_diff_assoc($data, $group));
+        $initialModifiedDate = $group['modified'];
+
+        $this->Groups->updateAll(['description' => 'Some random description ' . uniqid()], []);
+
+        // sleeping so we can capture the modified time diff.
+        sleep(1);
+
+        $this->Task->main();
+
+        $entity = $this->Groups->find()->where(['name' => $data['name']])->firstOrFail();
+        Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+        $updated = $entity->toArray();
+
+        $data['deny_edit'] ?
+            $this->assertTrue($updated['modified']->getTimestamp() === $initialModifiedDate->getTimestamp()) :
+            $this->assertTrue($updated['modified']->getTimestamp() > $initialModifiedDate->getTimestamp());
+
+        $this->assertSame([], array_diff_assoc($data, $updated));
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function groupsProvider() : array
+    {
+        return [
+            [['name' => 'Admins', 'deny_edit' => false, 'deny_delete' => true]],
+            [['name' => 'Everyone', 'deny_edit' => true, 'deny_delete' => true]]
+        ];
     }
 }

@@ -15,6 +15,7 @@ use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
+use Webmozart\Assert\Assert;
 
 /**
  * Import Task
@@ -35,7 +36,7 @@ class ImportTask extends Shell
 
         $systemGroups = Configure::read('Groups.systemGroups');
         if (empty($systemGroups)) {
-            $this->warn("System groups are not configured.  Nothing to do.");
+            $this->warn("System groups are not configured. Nothing to do.");
 
             return true;
         }
@@ -49,16 +50,22 @@ class ImportTask extends Shell
                 continue;
             }
 
-            if ($table->exists(['name' => $group['name']])) {
-                $this->warn("Group [" . $group['name'] . "] already exists. Skipping.");
+            $entity = $table->find()->where(['name' => $group['name']])->first();
+            Assert::nullOrIsInstanceOf($entity, EntityInterface::class);
+
+            if (null !== $entity && $entity->get('deny_edit')) {
+                $this->warn(sprintf('Group "%s" already exists and is not allowed to be modified.', $group['name']));
                 continue;
             }
 
-            $this->info("Group [" . $group['name'] . "] does not exist. Creating.");
-            $entity = $table->newEntity();
+            null === $entity ?
+                $this->info(sprintf('Creating group "%s".', $group['name'])) :
+                $this->info(sprintf('Updating group "%s".', $group['name']));
+
+            $entity = null === $entity ? $table->newEntity() : $entity;
             $entity = $table->patchEntity($entity, $group);
-            $result = $table->save($entity);
-            if (!$result) {
+
+            if (! $table->save($entity)) {
                 $this->err("Errors: \n" . implode("\n", $this->getImportErrors($entity)));
                 $this->abort("Failed to create group [" . $group['name'] . "]");
             }
@@ -76,17 +83,7 @@ class ImportTask extends Shell
     protected function getImportErrors(EntityInterface $entity): array
     {
         $result = [];
-
-        /**
-         * @var array $errors
-         */
-        $errors = $entity->errors();
-
-        if (empty($errors)) {
-            return $result;
-        }
-
-        foreach ($errors as $field => $error) {
+        foreach ($entity->getErrors() as $field => $error) {
             $msg = "[$field] ";
             $msg .= is_array($error) ? implode(', ', $error) : $error;
             $result[] = $msg;

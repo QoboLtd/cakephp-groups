@@ -9,11 +9,6 @@ parameters:
     earlyTerminatingMethodCalls:
         Cake\Console\Shell:
             - abort
-    ignoreErrors:
-        # This ignore rule an be removed once the patch is released:
-        # PR link: https://github.com/phpstan/phpstan/pull/1588
-        # Issue link: https://github.com/phpstan/phpstan/issues/1585
-        - '#Function ldap_control_paged_result_response invoked with 3 parameters, 4 required.#'
 includes:
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
