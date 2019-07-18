@@ -198,7 +198,7 @@ class GroupsTable extends Table
         $result = ldap_get_entries($connection, $search);
 
         if (empty($result)) {
-            return $result;
+            return [];
         }
 
         return $this->_normalizeResult($result);

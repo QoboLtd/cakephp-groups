@@ -15,6 +15,7 @@ use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
+use Webmozart\Assert\Assert;
 
 /**
  * Import Task
@@ -50,6 +51,7 @@ class ImportTask extends Shell
             }
 
             $entity = $table->find()->where(['name' => $group['name']])->first();
+            Assert::nullOrIsInstanceOf($entity, EntityInterface::class);
 
             if (null !== $entity && $entity->get('deny_edit')) {
                 $this->warn(sprintf('Group "%s" already exists and is not allowed to be modified.', $group['name']));

@@ -4,6 +4,7 @@ namespace Groups\Test\TestCase\Shell\Task;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Shell\Task\ImportTask;
+use Webmozart\Assert\Assert;
 
 /**
  * @property \Groups\Model\Table\GroupsTable $Groups
@@ -57,7 +58,10 @@ class ImportTaskTest extends TestCase
         $query = $this->Groups->find()->where(['name' => $data['name']]);
         $this->assertSame(1, $query->count());
 
-        $group = $query->firstOrFail()->toArray();
+        $entity = $query->firstOrFail();
+        Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+        $group = $entity->toArray();
+
         $this->assertSame([], array_diff_assoc($data, $group));
         $initialModifiedDate = $group['modified'];
 
@@ -68,10 +72,10 @@ class ImportTaskTest extends TestCase
 
         $this->Task->main();
 
-        $updated = $this->Groups->find()
-            ->where(['name' => $data['name']])
-            ->firstOrFail()
-            ->toArray();
+        $entity = $this->Groups->find()->where(['name' => $data['name']])->firstOrFail();
+        Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+        $updated = $entity->toArray();
+
 
         $data['deny_edit'] ?
             $this->assertTrue($updated['modified']->getTimestamp() === $initialModifiedDate->getTimestamp()) :
