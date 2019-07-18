@@ -76,7 +76,6 @@ class ImportTaskTest extends TestCase
         Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
         $updated = $entity->toArray();
 
-
         $data['deny_edit'] ?
             $this->assertTrue($updated['modified']->getTimestamp() === $initialModifiedDate->getTimestamp()) :
             $this->assertTrue($updated['modified']->getTimestamp() > $initialModifiedDate->getTimestamp());
