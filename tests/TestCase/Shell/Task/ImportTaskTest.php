@@ -52,7 +52,6 @@ class ImportTaskTest extends TestCase
     {
         $this->Groups->deleteAll([]);
 
-
         $this->Task->main();
 
         $query = $this->Groups->find()->where(['name' => $data['name']]);
