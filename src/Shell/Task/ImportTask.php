@@ -63,7 +63,6 @@ class ImportTask extends Shell
                 $this->info(sprintf('Updating group "%s".', $group['name']));
 
             $entity = null === $entity ? $table->newEntity() : $entity;
-            $original = $entity->ToArray();
             $entity = $table->patchEntity($entity, $group);
 
             if (! $table->save($entity)) {
