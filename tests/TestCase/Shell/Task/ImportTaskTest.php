@@ -58,7 +58,7 @@ class ImportTaskTest extends TestCase
         $this->assertSame(1, $query->count());
 
         $entity = $query->firstOrFail();
-        Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+        Assert::isInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
         $group = $entity->toArray();
 
         $this->assertSame([], array_diff_assoc($data, $group));
@@ -72,7 +72,7 @@ class ImportTaskTest extends TestCase
         $this->Task->main();
 
         $entity = $this->Groups->find()->where(['name' => $data['name']])->firstOrFail();
-        Assert::nullOrIsInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+        Assert::isInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
         $updated = $entity->toArray();
 
         $data['deny_edit'] ?
