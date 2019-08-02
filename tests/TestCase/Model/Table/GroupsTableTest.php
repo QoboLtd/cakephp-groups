@@ -6,6 +6,7 @@ use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Groups\Model\Table\GroupsTable;
+use Webmozart\Assert\Assert;
 
 /**
  * Groups\Model\Table\GroupsTable Test Case
@@ -95,6 +96,93 @@ class GroupsTableTest extends TestCase
         if (is_object($result)) {
             $this->assertNotEmpty($result->get('id'));
         }
+    }
+
+    public function testSaveFromAllowEditToDenyEdit()
+    {
+        $this->Groups->deleteAll([]);
+
+        $data = [
+            'name' => 'Allow Edit',
+            'description' => 'Allow Edit description',
+            'deny_edit' => false, // allow edit initially
+            'deny_delete' => true
+        ];
+
+        $entity = $this->Groups->newEntity($data);
+        $this->Groups->save($entity);
+
+        // switched to deny edit
+        $data['deny_edit'] = true;
+        $this->Groups->patchEntity($entity, $data);
+        $this->Groups->save($entity);
+
+        $entity = $this->Groups->find()->where(['name' => $data['name']])->firstOrFail();
+        Assert::isInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+
+        $this->assertSame([], array_diff_assoc(['deny_edit' => true], $entity->toArray()));
+    }
+
+    public function testSaveFromDenyEditToAllowEdit()
+    {
+        $this->Groups->deleteAll([]);
+
+        $data = [
+            'name' => 'Deny Edit',
+            'description' => 'Deny Edit description',
+            'deny_edit' => true, // deny edit initially
+            'deny_delete' => true
+        ];
+
+        $entity = $this->Groups->newEntity($data);
+        $this->Groups->save($entity);
+
+        // switched to allow edit
+        $data['deny_edit'] = false;
+        $this->Groups->patchEntity($entity, $data);
+        $this->Groups->save($entity);
+
+        $entity = $this->Groups->find()->where(['name' => $data['name']])->firstOrFail();
+        Assert::isInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+
+        $this->assertSame([], array_diff_assoc(['deny_edit' => true], $entity->toArray()));
+    }
+
+    public function testDeleteWithAllowDelete()
+    {
+        $this->Groups->deleteAll([]);
+
+        $data = [
+            'name' => 'Deny Edit',
+            'description' => 'Deny Edit description',
+            'deny_edit' => false,
+            'deny_delete' => false
+        ];
+
+        $entity = $this->Groups->newEntity($data);
+        $this->Groups->save($entity);
+
+        $entity = $this->Groups->find()->where(['name' => $data['name']])->firstOrFail();
+        Assert::isInstanceOf($entity, \Cake\Datasource\EntityInterface::class);
+
+        $this->assertTrue($this->Groups->delete($entity));
+    }
+
+    public function testDeleteWithDenyDelete()
+    {
+        $this->Groups->deleteAll([]);
+
+        $data = [
+            'name' => 'Deny Edit',
+            'description' => 'Deny Edit description',
+            'deny_edit' => false,
+            'deny_delete' => true
+        ];
+
+        $entity = $this->Groups->newEntity($data);
+        $this->Groups->save($entity);
+
+        $this->assertFalse($this->Groups->delete($entity));
     }
 
     public function testGetUserGroups(): void

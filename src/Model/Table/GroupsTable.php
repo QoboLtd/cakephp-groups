@@ -98,7 +98,7 @@ class GroupsTable extends Table
 
         // don't allow editing of non-editable group(s)
         $rules->addUpdate(function ($entity, $options) {
-            return !$entity->deny_edit;
+            return ! $entity->getOriginal('deny_edit');
         }, 'systemCheck');
 
         // don't allow deletion of non-deletable group(s)
