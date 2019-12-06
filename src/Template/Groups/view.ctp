@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-xs-12 col-md-6">
             <h4><?= $this->Html->link(
-                __d('Groups', 'Groups'),
+                __d('Qobo/Groups', 'Groups'),
                 ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'index']
             ) . ' &raquo; ' . h($group->name) ?></h4>
         </div>
@@ -31,9 +31,9 @@
                 </div>
                 <div class="box-body">
                     <dl class="dl-horizontal">
-                        <dt><?= __d('Groups', 'Name') ?></dt>
+                        <dt><?= __d('Qobo/Groups', 'Name') ?></dt>
                         <dd><?= h($group->name) ?></dd>
-                        <dt><?= __d('Groups', 'Description') ?></dt>
+                        <dt><?= __d('Qobo/Groups', 'Description') ?></dt>
                         <dd><?= h($group->description) ?></dd>
                     </dl>
                 </div>
@@ -47,7 +47,7 @@
                 <ul id="relatedTabs" class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
-                            <?= __d('Groups', 'Users'); ?>
+                            <?= __d('Qobo/Groups', 'Users'); ?>
                         </a>
                     </li>
                 </ul>
