@@ -87,7 +87,7 @@ class ImportTaskTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function groupsProvider() : array
+    public function groupsProvider(): array
     {
         $groups = [];
         foreach (Configure::read('Groups.systemGroups') as $group) {
