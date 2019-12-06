@@ -98,7 +98,7 @@ class GroupsTableTest extends TestCase
         }
     }
 
-    public function testSaveFromAllowEditToDenyEdit() : void
+    public function testSaveFromAllowEditToDenyEdit(): void
     {
         $this->Groups->deleteAll([]);
 
@@ -123,7 +123,7 @@ class GroupsTableTest extends TestCase
         $this->assertSame([], array_diff_assoc(['deny_edit' => true], $entity->toArray()));
     }
 
-    public function testSaveFromDenyEditToAllowEdit() : void
+    public function testSaveFromDenyEditToAllowEdit(): void
     {
         $this->Groups->deleteAll([]);
 
@@ -148,7 +148,7 @@ class GroupsTableTest extends TestCase
         $this->assertSame([], array_diff_assoc(['deny_edit' => true], $entity->toArray()));
     }
 
-    public function testDeleteWithAllowDelete() : void
+    public function testDeleteWithAllowDelete(): void
     {
         $this->Groups->deleteAll([]);
 
@@ -168,7 +168,7 @@ class GroupsTableTest extends TestCase
         $this->assertTrue($this->Groups->delete($entity));
     }
 
-    public function testDeleteWithDenyDelete() : void
+    public function testDeleteWithDenyDelete(): void
     {
         $this->Groups->deleteAll([]);
 
