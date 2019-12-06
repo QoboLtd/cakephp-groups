@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-xs-12 col-md-6">
             <h4><?= $this->Html->link(
-                __('Groups'),
+                __d('Groups', 'Groups'),
                 ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'index']
             ) . ' &raquo; ' . h($group->name) ?></h4>
         </div>
@@ -31,9 +31,9 @@
                 </div>
                 <div class="box-body">
                     <dl class="dl-horizontal">
-                        <dt><?= __('Name') ?></dt>
+                        <dt><?= __d('Groups', 'Name') ?></dt>
                         <dd><?= h($group->name) ?></dd>
-                        <dt><?= __('Description') ?></dt>
+                        <dt><?= __d('Groups', 'Description') ?></dt>
                         <dd><?= h($group->description) ?></dd>
                     </dl>
                 </div>
@@ -47,7 +47,7 @@
                 <ul id="relatedTabs" class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
-                            <?= __('Users'); ?>
+                            <?= __d('Groups', 'Users'); ?>
                         </a>
                     </li>
                 </ul>
@@ -58,10 +58,10 @@
                             <table class="table table-hover table-condensed table-vertical-align">
                                 <thead>
                                     <tr>
-                                        <th><?= __('Username') ?></th>
-                                        <th><?= __('Email') ?></th>
-                                        <th><?= __('First Name') ?></th>
-                                        <th><?= __('Last Name') ?></th>
+                                        <th><?= __d('CakeDC/Users', 'Username') ?></th>
+                                        <th><?= __d('CakeDC/Users', 'Email') ?></th>
+                                        <th><?= __d('CakeDC/Users', 'First name') ?></th>
+                                        <th><?= __d('CakeDC/Users', 'Last name') ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>

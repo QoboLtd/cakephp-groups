@@ -33,15 +33,15 @@ echo $this->Html->scriptBlock(
 <section class="content-header">
     <div class="row">
         <div class="col-xs-12 col-md-6">
-            <h4><?= __('Groups'); ?></h4>
+            <h4><?= __d('Groups', 'Groups'); ?></h4>
         </div>
         <div class="col-xs-12 col-md-6">
             <div class="pull-right">
                 <div class="btn-group btn-group-sm" role="group">
                 <?= $this->Html->link(
-                    '<i class="fa fa-plus"></i> ' . __('Add'),
+                    '<i class="fa fa-plus"></i> ' . __d('Groups', 'Add'),
                     ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'add'],
-                    ['escape' => false, 'title' => __('Add'), 'class' => 'btn btn-default']
+                    ['escape' => false, 'title' => __d('Groups', 'Add'), 'class' => 'btn btn-default']
                 ); ?>
                 </div>
             </div>
@@ -54,9 +54,9 @@ echo $this->Html->scriptBlock(
             <table class="table table-hover table-condensed table-vertical-align table-datatable">
                 <thead>
                     <tr>
-                        <th><?= __('Name') ?></th>
-                        <th><?= __('Users') ?></th>
-                        <th class="actions"><?= __('Actions') ?></th>
+                        <th><?= __d('Groups', 'Name') ?></th>
+                        <th><?= __d('Groups', 'Users') ?></th>
+                        <th class="actions"><?= __d('Groups', 'Actions') ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,13 +82,13 @@ echo $this->Html->scriptBlock(
                             <?= $this->Html->link(
                                 '<i class="fa fa-eye"></i>',
                                 ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'view', $group->id],
-                                ['title' => __('View'), 'class' => 'btn btn-default btn-sm', 'escape' => false]
+                                ['title' => __d('Groups', 'View'), 'class' => 'btn btn-default btn-sm', 'escape' => false]
                             ); ?>
                             <?php if (!$group->deny_edit) : ?>
                                 <?= $this->Html->link(
                                     '<i class="fa fa-pencil"></i>',
                                     ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'edit', $group->id],
-                                    ['title' => __('Edit'), 'class' => 'btn btn-default btn-sm', 'escape' => false]
+                                    ['title' => __d('Groups', 'Edit'), 'class' => 'btn btn-default btn-sm', 'escape' => false]
                                 ); ?>
                             <?php endif; ?>
                             <?php if (!$group->deny_delete) : ?>
@@ -96,8 +96,8 @@ echo $this->Html->scriptBlock(
                                     '<i class="fa fa-trash"></i>',
                                     ['plugin' => 'Groups', 'controller' => 'Groups', 'action' => 'delete', $group->id],
                                     [
-                                        'confirm' => __('Are you sure you want to delete {0}?', $group->name),
-                                        'title' => __('Delete'),
+                                        'confirm' => __d('Groups', 'Are you sure you want to delete {0}?', $group->name),
+                                        'title' => __d('Groups', 'Delete'),
                                         'class' => 'btn btn-default btn-sm',
                                         'escape' => false
                                     ]
