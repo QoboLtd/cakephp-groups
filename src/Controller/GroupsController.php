@@ -75,11 +75,11 @@ class GroupsController extends AppController
             $data = $this->request->getData();
             $group = $this->Groups->patchEntity($group, $data);
             if ($this->Groups->save($group)) {
-                $this->Flash->success((string)__('The group has been saved.'));
+                $this->Flash->success((string)__d('Qobo/Groups', 'The group has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error((string)__('The group could not be saved. Please, try again.'));
+                $this->Flash->error((string)__d('Qobo/Groups', 'The group could not be saved. Please, try again.'));
             }
         }
         $users = $this->Groups->Users->find('list', ['limit' => 500]);
@@ -107,11 +107,11 @@ class GroupsController extends AppController
             $data = $this->request->getData();
             $group = $this->Groups->patchEntity($group, $data);
             if ($this->Groups->save($group)) {
-                $this->Flash->success((string)__('The group has been saved.'));
+                $this->Flash->success((string)__d('Qobo/Groups', 'The group has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error((string)__('The group could not be saved. Please, try again.'));
+                $this->Flash->error((string)__d('Qobo/Groups', 'The group could not be saved. Please, try again.'));
             }
         }
         $users = $this->Groups->Users->find('list', ['limit' => 500]);
@@ -132,9 +132,9 @@ class GroupsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $group = $this->Groups->get($id);
         if ($this->Groups->delete($group)) {
-            $this->Flash->success((string)__('The group has been deleted.'));
+            $this->Flash->success((string)__d('Qobo/Groups', 'The group has been deleted.'));
         } else {
-            $this->Flash->error((string)__('The group could not be deleted. Please, try again.'));
+            $this->Flash->error((string)__d('Qobo/Groups', 'The group could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

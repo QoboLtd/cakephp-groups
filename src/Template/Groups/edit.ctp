@@ -33,7 +33,7 @@ echo $this->Html->script(
 <section class="content-header">
     <div class="row">
         <div class="col-xs-12 col-md-6">
-            <h4><?= __('Edit {0}', ['Group']) ?></h4>
+            <h4><?= __d('Qobo/Groups', 'Edit {0}', ['Group']) ?></h4>
         </div>
     </div>
 </section>
@@ -53,7 +53,7 @@ echo $this->Html->script(
                     </div>
                     <div class="row">
                         <div class="col-xs-<?= !empty($remoteGroups) ? 6 : 12 ?>">
-                            <div><?= $this->Form->label(__('Users')); ?></div>
+                            <div><?= $this->Form->label(__d('Qobo/Groups', 'Users')); ?></div>
                             <?= $this->Form->select('users._ids', $users, [
                                 'class' => 'select2',
                                 'multiple' => true
@@ -61,7 +61,7 @@ echo $this->Html->script(
                         </div>
                         <?php if (!empty($remoteGroups)) : ?>
                             <div class="col-xs-6">
-                                <div><?= $this->Form->label(__('Remote Group')); ?></div>
+                                <div><?= $this->Form->label(__d('Qobo/Groups', 'Remote Group')); ?></div>
                                 <?= $this->Form->select('remote_group_id', $remoteGroups, [
                                     'empty' => true,
                                     'class' => 'select2'
@@ -71,7 +71,7 @@ echo $this->Html->script(
                     </div>
                 </div>
                 <div class="box-footer">
-                    <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary']) ?>
+                    <?= $this->Form->button(__d('Qobo/Groups', 'Submit'), ['class' => 'btn btn-primary']) ?>
                 </div>
                 <?= $this->Form->end() ?>
             </div>
