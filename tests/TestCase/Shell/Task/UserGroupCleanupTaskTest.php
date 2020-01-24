@@ -68,8 +68,8 @@ class UserGroupCleanupTaskTest extends TestCase
             'contain' => [
                 'Users' => function ($q) {
                     return $q->where(['Users.id' => '00000000-0000-0000-0000-000000000001']);
-                }
-            ]
+                },
+            ],
         ]);
         $this->assertNotEquals(1, count($result->get('users')));
 
@@ -80,8 +80,8 @@ class UserGroupCleanupTaskTest extends TestCase
             'contain' => [
                 'Users' => function ($q) {
                     return $q->where(['Users.id' => '00000000-0000-0000-0000-000000000001']);
-                }
-            ]
+                },
+            ],
         ]);
         $this->assertEquals(1, count($result->get('users')));
     }
