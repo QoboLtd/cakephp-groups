@@ -35,7 +35,7 @@ class GroupShell extends Shell
         'Groups.Assign',
         'Groups.Import',
         'Groups.UserGroupCleanup',
-        'Groups.SyncLdapGroups'
+        'Groups.SyncLdapGroups',
     ];
 
     /**

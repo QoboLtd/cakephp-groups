@@ -33,10 +33,10 @@ class GroupsController extends AppController
                 'Users' => function ($q) {
                     return $q->select(['Users.id', 'Users.username'])
                         ->order(['Users.username' => 'ASC']);
-                }
+                },
             ],
             'maxLimit' => 500,
-            'limit' => 500
+            'limit' => 500,
         ]));
         $this->set('_serialize', ['groups']);
     }
@@ -53,7 +53,7 @@ class GroupsController extends AppController
         $group = $this->Groups->get($id, [
             'contain' => ['Users' => function ($q) {
                 return $q->select(['Users.id', 'Users.username', 'Users.first_name', 'Users.last_name']);
-            }]
+            }],
         ]);
 
         $this->set('group', $group);
@@ -98,7 +98,7 @@ class GroupsController extends AppController
     public function edit(string $id)
     {
         $group = $this->Groups->get($id, [
-            'contain' => ['Users']
+            'contain' => ['Users'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             /**

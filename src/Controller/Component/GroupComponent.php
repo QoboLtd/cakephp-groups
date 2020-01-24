@@ -49,7 +49,7 @@ class GroupComponent extends Component
 
         $query = $groups->find('list', [
             'keyField' => 'id',
-            'valueField' => 'name'
+            'valueField' => 'name',
         ]);
         $query->matching('Users', function ($q) use ($userId) {
             return $q->where(['Users.id' => $userId]);

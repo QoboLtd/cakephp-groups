@@ -106,7 +106,7 @@ class GroupsTableTest extends TestCase
             'name' => 'Allow Edit',
             'description' => 'Allow Edit description',
             'deny_edit' => false, // allow edit initially
-            'deny_delete' => true
+            'deny_delete' => true,
         ];
 
         $entity = $this->Groups->newEntity($data);
@@ -131,7 +131,7 @@ class GroupsTableTest extends TestCase
             'name' => 'Deny Edit',
             'description' => 'Deny Edit description',
             'deny_edit' => true, // deny edit initially
-            'deny_delete' => true
+            'deny_delete' => true,
         ];
 
         $entity = $this->Groups->newEntity($data);
@@ -156,7 +156,7 @@ class GroupsTableTest extends TestCase
             'name' => 'Deny Edit',
             'description' => 'Deny Edit description',
             'deny_edit' => false,
-            'deny_delete' => false
+            'deny_delete' => false,
         ];
 
         $entity = $this->Groups->newEntity($data);
@@ -176,7 +176,7 @@ class GroupsTableTest extends TestCase
             'name' => 'Deny Edit',
             'description' => 'Deny Edit description',
             'deny_edit' => false,
-            'deny_delete' => true
+            'deny_delete' => true,
         ];
 
         $entity = $this->Groups->newEntity($data);
@@ -216,7 +216,7 @@ class GroupsTableTest extends TestCase
             'baseDn' => '',
             'username' => 'foo',
             'password' => 'foo',
-            'groupsFilter' => '(objectclass=group)'
+            'groupsFilter' => '(objectclass=group)',
         ]);
         $result = $this->Groups->getRemoteGroups();
 

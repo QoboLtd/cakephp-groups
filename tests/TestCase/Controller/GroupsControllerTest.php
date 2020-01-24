@@ -81,7 +81,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $url = [
             'plugin' => 'Groups',
             'controller' => 'Groups',
-            'action' => 'index'
+            'action' => 'index',
         ];
         $this->assertRedirect($url);
 
@@ -127,7 +127,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $url = [
             'plugin' => 'Groups',
             'controller' => 'Groups',
-            'action' => 'index'
+            'action' => 'index',
         ];
         $this->assertRedirect($url);
 
@@ -166,7 +166,7 @@ class GroupsControllerTest extends IntegrationTestCase
         $url = [
             'plugin' => 'Groups',
             'controller' => 'Groups',
-            'action' => 'index'
+            'action' => 'index',
         ];
         $this->assertRedirect($url);
 
