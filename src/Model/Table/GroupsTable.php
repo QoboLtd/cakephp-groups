@@ -41,7 +41,7 @@ class GroupsTable extends Table
         'baseDn',
         'username',
         'password',
-        'groupsFilter'
+        'groupsFilter',
     ];
 
     /**
@@ -65,7 +65,7 @@ class GroupsTable extends Table
             'foreignKey' => 'group_id',
             'targetForeignKey' => 'user_id',
             'joinTable' => 'groups_users',
-            'className' => 'CakeDC/Users.Users'
+            'className' => 'CakeDC/Users.Users',
         ]);
     }
 
@@ -120,7 +120,7 @@ class GroupsTable extends Table
     {
         $query = $this->find('list', [
             'keyField' => 'id',
-            'valueField' => 'name'
+            'valueField' => 'name',
         ]);
         $query->matching('Users', function ($q) use ($userId) {
             return $q->where(['Users.id' => $userId]);

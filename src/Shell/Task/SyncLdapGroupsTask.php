@@ -41,7 +41,7 @@ class SyncLdapGroupsTask extends Shell
         'baseDn',
         'username',
         'password',
-        'groupsFilter'
+        'groupsFilter',
     ];
 
     /**
@@ -263,8 +263,8 @@ class SyncLdapGroupsTask extends Shell
 
         $data = [
             'users' => [
-                '_ids' => $userIds
-            ]
+                '_ids' => $userIds,
+            ],
         ];
 
         $group = $table->patchEntity($group, $data);
