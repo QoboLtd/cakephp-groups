@@ -28,7 +28,8 @@
         }
     ],
     "require": {
-        "qobo/cakephp-utils": "^13.0"
+        "cakedc/users": "^8.0",
+        "muffin/trash": "^2.1"
     },
     "require-dev": {
         "qobo/cakephp-composer-dev": "^v1.0"
