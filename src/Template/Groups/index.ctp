@@ -12,12 +12,12 @@
 
 use Cake\Core\Configure;
 
-echo $this->Html->css('Qobo/Utils./plugins/datatables/css/dataTables.bootstrap.min', ['block' => 'css']);
+echo $this->Html->css('Groups./plugins/datatables/css/dataTables.bootstrap.min', ['block' => 'css']);
 
 echo $this->Html->script(
     [
-        'Qobo/Utils./plugins/datatables/datatables.min',
-        'Qobo/Utils./plugins/datatables/js/dataTables.bootstrap.min',
+        'Groups./plugins/datatables/datatables.min',
+        'Groups./plugins/datatables/js/dataTables.bootstrap.min',
     ],
     ['block' => 'scriptBottom']
 );
