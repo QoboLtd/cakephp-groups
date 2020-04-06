@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "cakephp/cakephp": "^3.5 <3.7",
+        "cakephp/cakephp": "^3.8.11",
         "cakedc/users": "^8.0",
         "muffin/trash": "^2.1"
     },
