@@ -65,7 +65,7 @@ class GroupsTable extends Table
             'foreignKey' => 'group_id',
             'targetForeignKey' => 'user_id',
             'joinTable' => 'groups_users',
-            'className' => 'CakeDC/Users.Users',
+            'className' => Configure::read('Users.table', 'CakeDC/Users.Users'),
         ]);
     }
 
