@@ -28,7 +28,7 @@ class ImportTaskTest extends TestCase
         /**
          * @var \Groups\Model\Table\GroupsTable $table
          */
-        $table = TableRegistry::get('Groups.Groups');
+        $table = TableRegistry::getTableLocator()->get('Groups.Groups');
         $this->Groups = $table;
 
         /** @var \Cake\Console\ConsoleIo */

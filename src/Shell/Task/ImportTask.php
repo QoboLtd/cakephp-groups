@@ -42,7 +42,7 @@ class ImportTask extends Shell
         }
 
         // get groups table
-        $table = TableRegistry::get('Groups.Groups');
+        $table = TableRegistry::getTableLocator()->get('Groups.Groups');
 
         foreach ($systemGroups as $group) {
             if (empty($group['name'])) {

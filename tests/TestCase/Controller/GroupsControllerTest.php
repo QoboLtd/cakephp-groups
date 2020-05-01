@@ -17,8 +17,8 @@ use Groups\Model\Entity\Group;
 class GroupsControllerTest extends IntegrationTestCase
 {
     public $fixtures = [
-        'plugin.groups.groups',
-        'plugin.groups.groups_users',
+        'plugin.Groups.groups',
+        'plugin.Groups.groupsUsers',
         'plugin.CakeDC/Users.users',
     ];
 
@@ -29,7 +29,7 @@ class GroupsControllerTest extends IntegrationTestCase
         /**
          * @var \Groups\Model\Table\GroupsTable $table
          */
-        $table = TableRegistry::get('Groups.Groups');
+        $table = TableRegistry::getTableLocator()->get('Groups.Groups');
         $this->Groups = $table;
 
         // Run all tests as authenticated user

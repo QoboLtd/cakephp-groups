@@ -74,7 +74,7 @@ class SyncLdapGroupsTask extends Shell
             $this->abort('Required parameters are missing: ' . implode(', ', $diff) . '.');
         }
 
-        $groupsTable = TableRegistry::get('Groups.Groups');
+        $groupsTable = TableRegistry::getTableLocator()->get('Groups.Groups');
 
         $groups = $this->getGroups($groupsTable);
         if (empty($groups)) {

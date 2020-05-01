@@ -43,7 +43,7 @@ class AssignTask extends Shell
         /**
          * @var \Groups\Model\Table\GroupsTable $table
          */
-        $table = TableRegistry::get('Groups.Groups');
+        $table = TableRegistry::getTableLocator()->get('Groups.Groups');
         /**
          * Get default group entity.
          *
