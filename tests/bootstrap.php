@@ -119,4 +119,3 @@ Cake\Datasource\ConnectionManager::setConfig('test', [
 
 // Alias AppController to the test App
 class_alias($pluginName . '\Test\App\Controller\AppController', 'App\Controller\AppController');
-
