@@ -13,6 +13,7 @@ class RenameGroupsTable extends AbstractMigration
     public function change()
     {
         $this->table('groups')
-            ->rename('qobo_groups');
+            ->rename('qobo_groups')
+            ->update();
     }
 }
