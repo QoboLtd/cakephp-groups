@@ -35,11 +35,11 @@ class GroupsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Groups') ? [] : ['className' => 'Groups\Model\Table\GroupsTable'];
+        $config = TableRegistry::getTableLocator()->exists('Groups') ? [] : ['className' => 'Groups\Model\Table\GroupsTable'];
         /**
          * @var \Groups\Model\Table\GroupsTable $table
          */
-        $table = TableRegistry::get('Groups', $config);
+        $table = TableRegistry::getTableLocator()->get('Groups', $config);
         $this->Groups = $table;
     }
 

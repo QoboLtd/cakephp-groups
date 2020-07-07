@@ -32,7 +32,7 @@ class UserGroupCleanupTask extends Shell
         $this->hr();
 
         // get groups table
-        $table = TableRegistry::get('Groups.Groups');
+        $table = TableRegistry::getTableLocator()->get('Groups.Groups');
         $query = $table->find('all');
 
         if ($query->isEmpty()) {
@@ -45,7 +45,7 @@ class UserGroupCleanupTask extends Shell
         foreach ($groups as $group) {
             $this->info('Cleaning up ' . $group->name . ' group ..');
 
-            $table = TableRegistry::get('groups_users');
+            $table = TableRegistry::getTableLocator()->get('groups_users');
             $query = $table->find('all')
                 ->where(['group_id' => $group->id])
                 ->select(['user_id'])

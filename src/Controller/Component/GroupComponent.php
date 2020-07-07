@@ -45,7 +45,7 @@ class GroupComponent extends Component
             $userId = $this->Auth->user('id');
         }
 
-        $groups = TableRegistry::get('Groups.Groups');
+        $groups = TableRegistry::getTableLocator()->get('Groups.Groups');
 
         $query = $groups->find('list', [
             'keyField' => 'id',

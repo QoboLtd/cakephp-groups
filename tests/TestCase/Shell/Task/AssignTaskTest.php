@@ -30,13 +30,13 @@ class AssignTaskTest extends TestCase
         /**
          * @var \Groups\Model\Table\GroupsTable $table
          */
-        $table = TableRegistry::get('Groups.Groups');
+        $table = TableRegistry::getTableLocator()->get('Groups.Groups');
         $this->Groups = $table;
 
         /**
          * @var \CakeDC\Users\Model\Table\UsersTable $table
          */
-        $table = TableRegistry::get('CakeDC/Users.Users');
+        $table = TableRegistry::getTableLocator()->get('CakeDC/Users.Users');
         $this->Users = $table;
 
         /** @var \Cake\Console\ConsoleIo */
