@@ -1,7 +1,8 @@
 <?php
+
 use Migrations\AbstractMigration;
 
-class RenameGroupsTable extends AbstractMigration
+class GroupsTableDefaults extends AbstractMigration
 {
 
     /**
