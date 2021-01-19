@@ -19,7 +19,6 @@ use Webmozart\Assert\Assert;
  * Group shell
  *
  * @property \Groups\Shell\Task\ImportTask $Import
- * @property \Groups\Shell\Task\UserGroupCleanupTask $UserGroupCleanup
  * @property \Groups\Shell\Task\SyncLdapGroupsTask $SyncLdapGroups
  */
 class GroupShell extends Shell
@@ -32,7 +31,6 @@ class GroupShell extends Shell
      */
     public $tasks = [
         'Groups.Import',
-        'Groups.UserGroupCleanup',
         'Groups.SyncLdapGroups',
     ];
 
@@ -54,10 +52,6 @@ class GroupShell extends Shell
             ->addSubcommand(
                 'import',
                 ['help' => 'Import system groups.', 'parser' => $this->Import->getOptionParser()]
-            )
-            ->addSubcommand(
-                'user_group_cleanup',
-                ['help' => 'User group clean up.', 'parser' => $this->UserGroupCleanup->getOptionParser()]
             )
             ->addSubcommand(
                 'sync_ldap_groups',
