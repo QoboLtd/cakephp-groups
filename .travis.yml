@@ -1,6 +1,6 @@
 language: php
 
-dist: trusty
+dist: xenial
 
 sudo: false
 
@@ -17,10 +17,6 @@ env:
 matrix:
   fast_finish: true
 
-  allow_failures:
-    - php: 7.3
-    - php: nightly
-
   include:
     - php: 7.1
       env: PHPCS=1 COVERAGE=1 PHPSTAN=1
@@ -28,7 +24,7 @@ matrix:
       env: PHPCS=1 COVERAGE=0 PHPSTAN=1
     - php: 7.3
       env: PHPCS=1 COVERAGE=0 PHPSTAN=1
-    - php: nightly
+    - php: 7.4
       env: PHPCS=1 COVERAGE=0 PHPSTAN=1
 
 before_install:
