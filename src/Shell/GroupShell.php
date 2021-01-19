@@ -62,10 +62,6 @@ class GroupShell extends Shell
                 ['help' => 'Import system groups.', 'parser' => $this->Import->getOptionParser()]
             )
             ->addSubcommand(
-                'user_group_cleanup',
-                ['help' => 'User group clean up.', 'parser' => $this->UserGroupCleanup->getOptionParser()]
-            )
-            ->addSubcommand(
                 'sync_ldap_groups',
                 ['help' => 'LDAP groups synchronization.', 'parser' => $this->SyncLdapGroups->getOptionParser()]
             );
