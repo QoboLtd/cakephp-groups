@@ -20,7 +20,6 @@ use Webmozart\Assert\Assert;
  *
  * @property \Groups\Shell\Task\AssignTask $Assign
  * @property \Groups\Shell\Task\ImportTask $Import
- * @property \Groups\Shell\Task\UserGroupCleanupTask $UserGroupCleanup
  * @property \Groups\Shell\Task\SyncLdapGroupsTask $SyncLdapGroups
  */
 class GroupShell extends Shell
@@ -34,7 +33,6 @@ class GroupShell extends Shell
     public $tasks = [
         'Groups.Assign',
         'Groups.Import',
-        'Groups.UserGroupCleanup',
         'Groups.SyncLdapGroups',
     ];
 
