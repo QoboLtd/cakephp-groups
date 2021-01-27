@@ -17,6 +17,9 @@ env:
 matrix:
   fast_finish: true
 
+  allow_failures:
+    - php: 7.4
+
   include:
     - php: 7.1
       env: PHPCS=1 COVERAGE=1 PHPSTAN=1

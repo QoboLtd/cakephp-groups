@@ -17,9 +17,9 @@ use Groups\Model\Entity\Group;
 class GroupsControllerTest extends IntegrationTestCase
 {
     public $fixtures = [
-        'plugin.Groups.groups',
-        'plugin.Groups.groupsUsers',
-        'plugin.CakeDC/Users.users',
+        'plugin.Groups.Groups',
+        'plugin.Groups.GroupsUsers',
+        'plugin.CakeDC/Users.Users',
     ];
 
     public function setUp()
