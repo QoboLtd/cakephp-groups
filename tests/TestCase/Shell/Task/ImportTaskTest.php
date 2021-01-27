@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 class ImportTaskTest extends TestCase
 {
     public $fixtures = [
-        'plugin.groups.groups',
+        'plugin.Groups.Groups',
     ];
 
     /**

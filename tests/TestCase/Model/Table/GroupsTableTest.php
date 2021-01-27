@@ -22,9 +22,9 @@ class GroupsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.groups.groups',
-        'plugin.groups.groups_users',
-        'plugin.CakeDC/Users.users',
+        'plugin.Groups.Groups',
+        'plugin.Groups.GroupsUsers',
+        'plugin.CakeDC/Users.Users',
     ];
 
     /**
