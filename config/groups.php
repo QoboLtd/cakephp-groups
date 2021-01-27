@@ -2,7 +2,6 @@
 // Groups plugin configuration
 return [
     'Groups' => [
-        'defaultGroup' => 'Everyone',
         'systemGroups' => [
             [
                 'name' => 'Admins',

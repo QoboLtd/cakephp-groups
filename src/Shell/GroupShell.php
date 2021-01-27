@@ -18,9 +18,7 @@ use Webmozart\Assert\Assert;
 /**
  * Group shell
  *
- * @property \Groups\Shell\Task\AssignTask $Assign
  * @property \Groups\Shell\Task\ImportTask $Import
- * @property \Groups\Shell\Task\UserGroupCleanupTask $UserGroupCleanup
  * @property \Groups\Shell\Task\SyncLdapGroupsTask $SyncLdapGroups
  */
 class GroupShell extends Shell
@@ -32,9 +30,7 @@ class GroupShell extends Shell
      * @link https://book.cakephp.org/3.0/en/console-and-shells.html#Shell::$tasks
      */
     public $tasks = [
-        'Groups.Assign',
         'Groups.Import',
-        'Groups.UserGroupCleanup',
         'Groups.SyncLdapGroups',
     ];
 
@@ -54,16 +50,8 @@ class GroupShell extends Shell
         $parser
             ->setDescription("Groups management tasks.")
             ->addSubcommand(
-                'assign',
-                ['help' => 'Assign group to all users.', 'parser' => $this->Assign->getOptionParser()]
-            )
-            ->addSubcommand(
                 'import',
                 ['help' => 'Import system groups.', 'parser' => $this->Import->getOptionParser()]
-            )
-            ->addSubcommand(
-                'user_group_cleanup',
-                ['help' => 'User group clean up.', 'parser' => $this->UserGroupCleanup->getOptionParser()]
             )
             ->addSubcommand(
                 'sync_ldap_groups',
